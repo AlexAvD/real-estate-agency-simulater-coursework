@@ -21,8 +21,18 @@ int main() {
   */
  	setRus();
 
-	
-	
+	 
+/* 	for (auto & item : result) {
+		for (auto const & [key, val] : item) {
+			cout << key << " - " << val << endl;
+		} 
 
-	return 0;
-}  
+		cout << '\n';
+	}  */
+	cout << readFile("./data/properties.txt"); 
+ 
+	// cout << result.size(); 
+	   
+	return 0; 
+}
+

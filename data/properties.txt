@@ -4,18 +4,20 @@ brick;
 monolith;
 panel;
 cellular concrete;
+name: Да да Александр Дмитриевич
 
 id: 0
-type: house
+type: house   
 transaction: sale
-price: 10000
-material: brick
+price: 10000    
+material: brick           
 repair: false 
-furniture: true
+furniture: true    
 rooms: 3
 district: A
 area: 35
 yearBuild: 2010
+name: Аганов Александр Дмитриевич
 
 id: 1
 type: flat

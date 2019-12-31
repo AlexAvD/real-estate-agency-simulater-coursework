@@ -1,0 +1,11 @@
+id: 0
+name: Piter
+surname: Baker
+gender: male
+age: 35
+experience: 4
+charisma: 0.7
+
+
+
+

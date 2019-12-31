@@ -1,0 +1,27 @@
+monolithic brick;
+tree;
+brick;
+monolith;
+panel;
+cellular concrete;
+
+id: 0
+type: house
+transaction: sale
+price: 10000
+material: brick
+repair: false 
+furniture: true
+rooms: 3
+district: A
+area: 35
+yearBuild: 2010
+
+id: 1
+type: flat
+transaction: rent
+floor: 3
+floors: 10
+lift: false
+repair: true
+storeys: 10

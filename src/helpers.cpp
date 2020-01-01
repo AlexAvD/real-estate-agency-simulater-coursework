@@ -38,7 +38,6 @@ std::string normalizeLine(const std::string & str) {
   std::vector<std::string> tokens;
 
 	for (size_t start = 0, end = 0, len = str.length(); end < len; ++end) {
-    char ch = str[end];
 		if (!isspace(str[end])) {
 			if (isspace(str[end + 1]) || str[end + 1] == '\0') {
 				tokens.push_back(str.substr(start, end - start + 1));
@@ -110,21 +109,16 @@ std::vector<std::map<std::string, std::string>> readFile(const std::string & fil
   return result;
 }
 
+int countEqualElements(const std::vector<std::string> & src, const std::vector<std::string> & elements) {
+	size_t nSimilar = 0;
 
-/* std::ostream& operator<<(std::ostream &out, const std::vector<std::string> & v) {
-	out << "[ ";
+	for (const std::string & str : elements) {
+		auto it = std::find(src.begin(), src.end(), str);
 
-  for (size_t i = 0, len = v.size(); i < len; i++) {
-    out << v[i];
+		if (it != src.end()) {
+			++nSimilar;
+    }
+	}
 
-    if (i != len - 1) {
-      out << ", ";
-    } else {
-			out << " ";
-		}
-  }
-
-  out << ']' << std::endl;
-
-  return out;
-} */
+	return nSimilar;
+}

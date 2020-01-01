@@ -4,35 +4,37 @@
 #include "Person.h"
 #include "Buyer.h"
 #include "Seller.h"
+#include "Agency.h"
 
-class Realtor : Person {
+class Agency;
+class Realtor : public Person {
   private:
-    short experience_;
-    Buyer* currentBuyer_;
-    Seller* currentSeller_;
-    std::stack<Buyer*> buyers_;
-    std::stack<Seller*> sellers_;
+    int experience_;
+    Agency * agency_;
+    Client* buyer_;
+    Client* seller_;
+    std::stack<Client*> buyers_;
+    std::stack<Client*> sellers_;
 
   public: 
     Realtor();
+    Realtor(Agency* agencry);
 
-    void addBuyer(Buyer* buyer);
-    void addSeller(Buyer* buyer);
-    Buyer* findBuyer();
-    Seller* findSeller();
+    void addBuyer(Client* buyer);
+    void addSeller(Client* seller);
+    Client* searchClient();
     void work();
 
     // setters
-    void setExperience(short experience);
-    void setWorkHours(short workHours);
-    void setCurrentBuyer(Buyer* buyer);
-    void setCurrentSeller(Seller* seller);
+    void setExperience(int experience);
+    void setBuyer(Client* buyer);
+    void setSeller(Client* seller);
  
     // getters
-    short getExperience() const;
-    short getWorkHours() const;
-    Buyer* getCurrentBuyer() const;
-    Seller* getCurrentSeller() const;
+    int getExperience() const;
+    int getWorkHours() const;
+    Client* getCurrentBuyer() const;
+    Client* getCurrentSeller() const;
 
     
 };

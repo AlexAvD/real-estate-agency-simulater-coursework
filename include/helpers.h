@@ -5,18 +5,25 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <algorithm>
 
-
+// локализация
 void setRus();
 
+// текст
 bool isBlank(const std::string & str);
 std::vector<std::string> tokenize(const std::string & str, char separator);
 std::string normalizeLine(const std::string & str);
 std::string concat(const std::vector<std::string> & strings, char ch);
 std::string trim(const std::string & str);
 
+// векторы
+int countEqualElements(const std::vector<std::string> & src, const std::vector<std::string> & elements);
+
+// файлы
 std::vector<std::map<std::string, std::string>> readFile(const std::string & fileName);
 
+// вывод
 template <class T>
 std::ostream& operator<<(std::ostream &out, const std::vector<T> & v) {
   for (size_t i = 0, len = v.size(); i < len; i++) {

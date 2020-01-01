@@ -1,70 +1,135 @@
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include "helpers.h"
 #include "Person.h"
+
+const std::vector<std::vector<std::string>> Person::names_ = {
+  {
+    "Анна", "Тамара", "Раиса", "Лариса", "Зоя", "Ольга", "Полина", "Елена", 
+    "Юлия", "Маргарита", "Любовь", "Виктория", "Алёна", "Татьяна", "Людмила", 
+    "Наталья", "Валентина", "Алла", "Элла", "Арина"
+  },
+  {
+    "Виктор", "Юрий", "Антон", "Артём", "Владислав", "Богдан", "Алексей", 
+    "Иван", "Лев", "Руслан", "Фёдор", "Вадим", "Павел", "Ярослав", "Аркадий", 
+    "Семён", "Даниил", "Евгений", "Григорий", "Валерий"
+  }
+};
+
+const std::vector<std::vector<std::string>> Person::surnames_ = {
+  {
+    "Зыкова", "Киселёва", "Казакова", "Горбачёва", "Щербакова", "Зимина", "Наумова", 
+    "Ермакова", "Маркова", "Федотова", "Зиновьева", "Меркушева", "Кулакова", "Овчинникова", 
+    "Алексеева", "Лаврентьева", "Ильина", "Тетерина", "Федосеева", "Муравьёва"
+  },
+  {
+    "Зыков", "Афанасьев", "Фокин", "Колобов", "Богданов", "Самсонов", "Лукин", 
+    "Фомичёв", "Владимиров", "Николаев", "Моисеев", "Фомин", "Самойлов", "Блинов", 
+    "Дьячков", "Туров", "Орехов", "Субботин", "Фадеев", "Наумов",
+  }
+};
+
+
+const std::vector<std::vector<std::string>> Person::midnames_ = {
+  {
+    "Гаврииловна", "Даниловна", "Васильевна", "Иннокентьевна", "Дмитриевна", "Егоровна", 
+    "Богдановна", "Святославовна", "Ростиславовна", "Александровна", "Семёновна", 
+    "Георгиевна", "Андреевна", "Степановна", "Борисовна", "Матвеевна", "Тимуровна", 
+    "Витальевна", "Львовна", "Романовна"
+  },
+  {
+    "Владиславович", "Вадимович", "Семёнович", "Вячеславович", "Андреевич", "Степанович", 
+    "Евгеньевич", "Геннадьевич", "Михайлович", "Олегович", "Григорьевич", "Ростиславович", 
+    "Святославович", "Витальевич", "Петрович", "Даниилович", "Ярославович"
+  }
+};
 
 Person::Person() {
   name_ = "";
   surname_ = "";
   midname_ = "";
   gender_ = "";
+  passportData_ = "";
   age_ = 0;
   salary_ = 0;
   money_ = 0;
 }
 
 Person::Person(
-  std::string name, std::string surname, std::string midname,
-  std::string gender, short age, int salary, long money
+  std::string name, std::string surname, std::string midname, bool gender, 
+  std::string passportData, int age, int salary, long money
 ) {
   setName(name);
   setSurname(surname);
   setMidname(midname);
   setGender(gender);
+  setPassportData(passportData);
   setAge(age);
   setSalary(salary);
   setMoney(money);
 }
 
 Person::Person(
-  std::string fullName, std::string gender, 
-  short age, int salary, long money
+  std::string fullName, bool gender, std::string passportData, 
+  int age, int salary, long money
 ) {
   setFullName(fullName);
   setGender(gender);
+  setPassportData(passportData);
   setAge(age);
   setSalary(salary);
   setMoney(money);
 }
 
+Person Person::generate() {
+  std::stringstream ss;
+  
+  bool gender = Random::getBool();
+  std::string name = names_[gender][Random::getInt(0, names_.size() - 1)];
+  std::string surname = surnames_[gender][Random::getInt(0, surnames_.size() - 1)];
+  std::string midname = midnames_[gender][Random::getInt(0, midnames_.size() - 1)];
+  int age = Random::getInt(25, 60);
+  int salary = Random::getInt(20, 150) * 1000;
+
+  ss.fill('0');
+  ss 
+    << "60" << Random::getInt(80, 99) 
+    << std::setw(3) << Random::getInt(0, 500) 
+    << std::setw(3) << Random::getInt(0, 999);
+ 
+  std::string passortData = ss.str();  
+
+  return Person(name, surname, midname, gender, passortData, age, salary);
+}
+
 // setters
 
-void Person::setName(std::string name) {
+void Person::setName(const std::string & name) {
   name_ = name;
 }
 
-void Person::setSurname(std::string surname) {
+void Person::setSurname(const std::string & surname) {
   surname_ = surname;
 }
 
-void Person::setMidname(std::string midname) {
+void Person::setMidname(const std::string & midname) {
   midname_ = midname;
 }
 
-void Person::setFullName(std::string fullName) {
+void Person::setFullName(const std::string & fullName) {
   std::vector<std::string> tokens = tokenize(fullName, ' ');
 
-  setName(tokens[0]);
-  setSurname(tokens[1]);
+  setSurname(tokens[0]);
+  setName(tokens[1]);
   setMidname(tokens[2]);
 }
 
-void Person::setGender(std::string gender) {
+void Person::setGender(bool gender) {
   gender_ = gender;
 }
 
-void Person::setAge(short age) {
+void Person::setPassportData(const std::string & passportData) {
+  passportData_ = passportData;
+}
+
+void Person::setAge(int age) {
   age_ = age;
 }
 
@@ -91,24 +156,28 @@ std::string Person::getMidname() const {
 }
 
 std::string Person::getFullName() const {
-  std::string fullName = name_ + ' ' + surname_ + ' ' + midname_;
+  std::string fullName = surname_ + ' ' + name_ + ' ' + midname_;
 
   return fullName;
 }
 
-std::string Person::getGender() const {
+bool Person::getGender() const {
   return gender_;
 }
 
-unsigned short Person::getAge() const {
+std::string Person::getPassportData() const {
+  return passportData_;
+}
+
+int Person::getAge() const {
   return age_;
 }
  
-unsigned int Person::getSalary() const {
+int Person::getSalary() const {
   return salary_;
 }
 
-unsigned long Person::getMoney() const {
+long Person::getMoney() const {
   return money_;
 }
 
@@ -119,6 +188,7 @@ std::ostream& operator<<(std::ostream &out, const Person &person) {
 std::ostream& Person::print(std::ostream &out) const {
   out << "Full name: " << getFullName() << '\n'
       << "Gender: " << getGender() << '\n'
+      << "Passport data: " << getPassportData() << '\n'
       << "Age: " << getAge() << '\n'
       << "Salary: " << getSalary() << " руб." << '\n'
       << "Money: " << getMoney() << " руб." << '\n';

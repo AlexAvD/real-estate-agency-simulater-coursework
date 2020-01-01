@@ -63,7 +63,15 @@
         "list": "cpp",
         "queue": "cpp",
         "xhash": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "xtree": "cpp",
+        "locale": "cpp",
+        "xlocbuf": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

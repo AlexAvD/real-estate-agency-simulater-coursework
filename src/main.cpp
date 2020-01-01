@@ -1,38 +1,41 @@
-#include "coursework.h"
 #include <random>
-#include "random.h"
 #include <limits>
-#include "helpers.h"
-#include "Person.h"
-#include "Date.h"
 #include <stack>
+#include <iomanip>
+#include <algorithm>
+
+#include "helpers.h"
+#include "Random.h"
+#include "Person.h"
+#include "Client.h"
+#include "Buyer.h"
+#include "Agency.h"
+#include "Realtor.h"
+#include "Date.h"
 
 
 using std::cout;
 using std::endl;
 
 int main() {	 
-	// Realtor r = Realtor("lol", "lal", 19);
-	/* Random r;
+	setRus();
+/* 
+	cout << Person::generate() << endl;
+	cout << Person::generate(); */
 
-	for (int i = 0; i < 5; i++) {
-		std::cout << "r1: " << r.getDouble(0, 10000) << "\tr2: " << r.getDouble(0, 1) << std::endl;
+
+	/* for (int i = 0; i < 5; i++) {
+		cout << Random::getInt(10, 99) << endl;
 	} 
-  */
- 	setRus();
+ */
 
-	 
-/* 	for (auto & item : result) {
-		for (auto const & [key, val] : item) {
-			cout << key << " - " << val << endl;
-		} 
 
-		cout << '\n';
-	}  */
-	cout << readFile("./data/properties.txt"); 
+
+	cout << Person::generate() << "\n\n";
+	cout << Person::generate(); 
  
-	// cout << result.size(); 
-	   
+
 	return 0; 
 }
 
+ 

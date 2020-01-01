@@ -1,41 +1,44 @@
 #pragma once
 
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <cstdlib> 
 #include <sstream>
 #include <ctime>
+#include "helpers.h"
 
 class Date {
   private:
-    static const short days_[13];
+    static const int days_[13];
     static const std::time_t time_;
     static const std::tm* now_;
 
-    short day_;
-    short month_;
-    short year_;
+    int day_;
+    int month_;
+    int year_;
 
   public:
     Date();
-    Date(short day, short month, short year);
+    Date(int day, int month, int year);
     Date(const std::string date);
     Date(const Date& date);
 
     // setters
-    void setDay(short day);
-    void setMonth(short month);
-    void setYear(short year);
-    void setDate(short day, short month, short year);
+    void setDay(int day);
+    void setMonth(int month);
+    void setYear(int year);
+    void setDate(int day, int month, int year);
   
     // getters
-    short getDay() const;
-    short getMonth() const;
-    short getYear() const;
+    int getDay() const;
+    int getMonth() const;
+    int getYear() const;
     std::string getDate() const;
 
     Date &operator++();
     Date &operator--();
+    Date operator+(int days);
 
     friend std::ostream& operator<<(std::ostream& out, const Date& date);
 };

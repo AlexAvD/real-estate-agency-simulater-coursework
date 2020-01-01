@@ -3,17 +3,19 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <sstream>
 #include <limits>
 #include <random>
+#include <chrono>
+#include <functional>
 
 class Random {
   private:
-    unsigned int m_seed;
+    static unsigned seed_;
+    static std::default_random_engine generator_; 
+    static std::uniform_int_distribution<int> dist_;
 
   public:
-    Random();
-    Random(unsigned int seed);
-
-    int getInt(int min, int max);
-    double getDouble(double min, double max);
+    static int getInt(int min, int max);
+    static bool getBool();
 };

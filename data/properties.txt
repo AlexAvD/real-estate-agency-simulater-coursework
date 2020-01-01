@@ -12,7 +12,7 @@ transaction: sale
 price: 10000    
 material: brick           
 repair: false 
-furniture: true    
+furniture: true
 rooms: 3
 district: A
 area: 35

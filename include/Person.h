@@ -31,7 +31,13 @@ class Person {
     Person(std::string fullName, bool gender, std::string passportData, 
       int age, int salary, long money = 0);
 
+    Person(const Person & person);
+
     static Person generate();
+
+    friend class Client;
+    friend class Seller;
+    friend class Buyer;
 
      // setters
     void setName(const std::string & name);
@@ -55,7 +61,8 @@ class Person {
     int getSalary() const;
     long getMoney() const;
 
-    virtual std::ostream& print(std::ostream &out) const;
+    // Person &operator=(const Person & p);
 
+    virtual std::ostream& print(std::ostream &out) const;
     friend std::ostream& operator<<(std::ostream &out, const Person &person);
 };

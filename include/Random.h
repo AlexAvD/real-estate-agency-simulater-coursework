@@ -12,10 +12,11 @@
 class Random {
   private:
     static unsigned seed_;
-    static std::default_random_engine generator_; 
-    static std::uniform_int_distribution<int> dist_;
+    static std::default_random_engine engine_; 
+    static std::uniform_int_distribution<int> gen_;
 
   public:
     static int getInt(int min, int max);
+    static int randInt();
     static bool getBool();
 };

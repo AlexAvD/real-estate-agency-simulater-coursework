@@ -78,6 +78,17 @@ Person::Person(
   setMoney(money);
 }
 
+Person::Person(const Person & person) {
+  name_ = person.name_;
+  surname_ = person.surname_;
+  midname_ = person.midname_;
+  passportData_ = person.passportData_;
+  gender_ = person.gender_;
+  age_ = person.age_;
+  salary_ = person.salary_;
+  money_ = person.money_;
+}
+
 Person Person::generate() {
   std::stringstream ss;
   
@@ -180,6 +191,19 @@ int Person::getSalary() const {
 long Person::getMoney() const {
   return money_;
 }
+
+/* Person& Person::operator=(const Person & p) {
+  name_ = p.name_;
+  surname_ = p.surname_;
+  midname_ = p.midname_;
+  passportData_ = p.passportData_;
+  gender_ = p.gender_;
+  age_ = p.age_;
+  salary_ = p.salary_;
+  money_ = p.money_;
+
+  return *this;
+} */
 
 std::ostream& operator<<(std::ostream &out, const Person &person) {
   return person.print(out);

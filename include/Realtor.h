@@ -2,8 +2,7 @@
 
 #include <stack>
 #include "Person.h"
-#include "Buyer.h"
-#include "Seller.h"
+#include "Client.h"
 #include "Agency.h"
 
 class Agency;

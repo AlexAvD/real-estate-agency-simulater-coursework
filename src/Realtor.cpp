@@ -17,7 +17,13 @@ void Realtor::setSeller(Client* seller) {
   seller_ = seller;
 }
 
-Client* searchClient() {
+Client* Realtor::searchClient() {
+  int percent = asymp(experience_, 20, 50, 2);
+
+  if (chance(percent)) {
+    
+  }
+
   return nullptr;
 }
 

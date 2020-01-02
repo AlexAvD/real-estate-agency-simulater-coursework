@@ -60,7 +60,7 @@ std::string trim(const std::string & str) {
   while (isspace(str[--end]))
     ;
 
-  return str.substr(start, start + end);
+  return str.substr(start, end - start + 1);
 }
 
 std::string concat(const std::vector<std::string> & strings, char ch) {
@@ -109,6 +109,12 @@ std::vector<std::map<std::string, std::string>> readFile(const std::string & fil
   return result;
 }
 
+bool chance(int percent) {
+	percent = (percent > 100) ? 100 : ((percent < 0) ? 0 : percent);
+
+	return (Random::getInt(1, 100) <= percent); 
+}
+
 int countEqualElements(const std::vector<std::string> & src, const std::vector<std::string> & elements) {
 	size_t nSimilar = 0;
 
@@ -121,4 +127,42 @@ int countEqualElements(const std::vector<std::string> & src, const std::vector<s
 	}
 
 	return nSimilar;
+}
+
+std::ostream& clrll(std::ostream& out) {
+    out << "\x1b[1A\x1b[0K";
+    return out;
+}
+
+std::ostream& clrl(std::ostream& out) {
+    out << "\r\x1b[0K";
+    return out;
+}
+
+/* 
+
+Example:
+
+asim(i, 0, 100, 0):     | asim(i, 0, 100, 1):   | asim(i, 0, 100, 5):   | asim(i, 0, 100, 10):
+----------------------------------------------------------------------------------------------
+ 0                      |  0                    |  0                    |  0
+50                      | 50                    | 16                    |  9
+66                      | 66                    | 28                    | 16
+75                      | 75                    | 37                    | 23
+80                      | 80                    | 44                    | 28
+83                      | 83                    | 50                    | 33
+85                      | 85                    | 54                    | 37
+87                      | 87                    | 58                    | 41
+88                      | 88                    | 61                    | 44
+90                      | 90                    | 64                    | 47
+90                      | 90                    | 66                    | 50
+...                     | ...                   | ...                   | ...
+100                     | 100                   | 100                   | 100
+
+*/
+
+double asymp(double num, double min, double max, double growRate) {
+	growRate = (growRate < 1) ? 1 : growRate;
+
+	return (max * num + min * growRate) / (num + growRate);
 }

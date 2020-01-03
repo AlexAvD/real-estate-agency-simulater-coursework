@@ -20,5 +20,5 @@ std::ostream& Seller::print(std::ostream &out) const {
 
   out << "=== SELLER ===" << '\n';
 
-  return Client::Person::print(out);
+  return Client::print(out);
 }

@@ -45,7 +45,7 @@ Person::Person() {
   name_ = "";
   surname_ = "";
   midname_ = "";
-  gender_ = "";
+  gender_ = 0;
   passportData_ = "";
   age_ = 0;
   salary_ = 0;
@@ -192,19 +192,6 @@ long Person::getMoney() const {
   return money_;
 }
 
-/* Person& Person::operator=(const Person & p) {
-  name_ = p.name_;
-  surname_ = p.surname_;
-  midname_ = p.midname_;
-  passportData_ = p.passportData_;
-  gender_ = p.gender_;
-  age_ = p.age_;
-  salary_ = p.salary_;
-  money_ = p.money_;
-
-  return *this;
-} */
-
 std::ostream& operator<<(std::ostream &out, const Person &person) {
   return person.print(out);
 }
@@ -212,8 +199,8 @@ std::ostream& operator<<(std::ostream &out, const Person &person) {
 std::ostream& Person::print(std::ostream &out) const {
   out << "Full name: " << getFullName() << '\n'
       << "Gender: " << getGender() << '\n'
-      << "Passport data: " << getPassportData() << '\n'
       << "Age: " << getAge() << '\n'
+      << "Passport data: " << getPassportData() << '\n'
       << "Salary: " << getSalary() << " руб." << '\n'
       << "Money: " << getMoney() << " руб." << '\n';
 

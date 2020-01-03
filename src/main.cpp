@@ -3,6 +3,7 @@
 #include <stack>
 #include <iomanip>
 #include <algorithm>
+#include <string>
 
 #include "Random.h"
 #include "Date.h"
@@ -41,7 +42,23 @@ int main() {
 		trim("  a  "), 
 		"lol"
 	}); */
+
+	/* Seller s = Seller::generate();
+	Person *pp = &s;
+
+	cout << *pp; */
+
+	// std::vector<std::string> lines = readFile("./data/properties.txt");
+	// cout << handleLines(, ':');
+
+	// cout << lines;
 	
+	// cout << *test() << '\n';
+	
+	Person r = Person::generate();
+
+	cout << r;
+
 	return 0; 
 }
 

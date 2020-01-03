@@ -4,36 +4,38 @@
 #include "Person.h"
 #include "Client.h"
 #include "Agency.h"
+#include "Buyer.h"
+#include "Seller.h"
 
 class Agency;
 class Realtor : public Person {
   private:
     int experience_;
-    Agency * agency_;
-    Client* buyer_;
-    Client* seller_;
-    std::stack<Client*> buyers_;
-    std::stack<Client*> sellers_;
+    float charisma_;
+    Agency *agency_;
+    Buyer *currentBuyer_;
+    Seller *currentSeller_;
+    std::stack<Seller*> sellers_;
 
   public: 
     Realtor();
     Realtor(Agency* agencry);
 
-    void addBuyer(Client* buyer);
-    void addSeller(Client* seller);
-    Client* searchClient();
-    void work();
-
     // setters
     void setExperience(int experience);
-    void setBuyer(Client* buyer);
-    void setSeller(Client* seller);
+    void setBuyer(Buyer *buyer);
+    void setSeller(Seller *seller);
  
     // getters
     int getExperience() const;
-    int getWorkHours() const;
     Client* getCurrentBuyer() const;
     Client* getCurrentSeller() const;
 
+    void addBuyer(Client *buyer);
+    void addSeller(Client *seller);
+    void work();
+    Buyer* searchBuyer();
+    Seller* searchSeller();
     
+    virtual std::ostream& print(std::ostream &out) const override;
 };

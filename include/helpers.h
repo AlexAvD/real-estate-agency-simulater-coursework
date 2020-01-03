@@ -29,16 +29,18 @@ bool chance(int percent = 100);
 // функция возвращает количество совпадающих эелементов вектора "elements" в векторе "src"
 int countEqualElements(const std::vector<std::string> & src, const std::vector<std::string> & elements);
 
-// файлы
+/* файлы */
 
-// функция считывает файл и возвращает vector
-std::vector<std::map<std::string, std::string>> readFile(const std::string & fileName);
+// функция считывает файл и возвращает vector хранящий
+// std::vector<std::map<std::string, std::string>> readFile(const std::string & fileName);
+std::vector<std::string> readFile(const std::string & fileName);
+std::vector<std::map<std::string, std::string>> handleFile(const std::string & fileName, char separator);
 
 // вывод всех данных контейнреа vector
 template <class T>
-std::ostream& operator<<(std::ostream &out, const std::vector<T> & v) {
-  for (size_t i = 0, size = v.size(); i < size; i++) {
-    out << v[i] << '\n';
+std::ostream& operator<<(std::ostream &out, const std::vector<T> & vector) {
+  for (size_t i = 0, size = vector.size(); i < size; i++) {
+    out << vector[i] << '\n';
   }
 
   return out;
@@ -46,27 +48,25 @@ std::ostream& operator<<(std::ostream &out, const std::vector<T> & v) {
 
 // вывод всех данных контейнреа map
 template <class T, class L> 
-std::ostream& operator<<(std::ostream &out, const std::map<T, L> & m) {
-  for (auto const & [key, val] : m) {
+std::ostream& operator<<(std::ostream &out, const std::map<T, L> & map) {
+  for (auto const & [key, val] : map) {
     out << key << " : " << val << '\n';
   }
 
   return out;
 }
 
+// вывод данных вектора
 template <class T>
-void print(const std::vector<T> &v) {
-  for (size_t i = 0, size = v.size(); i < size; i++) {
-    std::cout << v[i] << ", ";
-  }
+void print(const std::vector<T> &v);
 
-  std::cout << '\n';
-}
 
+/* манипуляторы вывода */
  
-// манипуляторы вывода
- 
+// очищает предыдущую строку
 std::ostream& clrll(std::ostream& out);
+
+// очищает текущую строку
 std::ostream& clrl(std::ostream& out);
 
 

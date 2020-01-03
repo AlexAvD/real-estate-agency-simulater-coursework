@@ -77,8 +77,25 @@ std::string concat(const std::vector<std::string> & strings, char ch) {
   return result;
 }
 
-std::vector<std::map<std::string, std::string>> readFile(const std::string & fileName) {
+//std::vector<std::map<std::string, std::string>> 
+
+std::vector<std::string> readFile(const std::string & fileName) {
 	std::ifstream file(fileName);
+	std::vector<std::string> result;
+	std::string line;
+
+	if (file.is_open()) {
+		
+		while (!file.eof()) {
+			getline(file, line);
+
+			result.push_back(line);
+		}
+	}
+
+	return result;
+
+	/* std::ifstream file(fileName);
 	std::vector<std::map<std::string, std::string>> result;
 	
 
@@ -103,10 +120,34 @@ std::vector<std::map<std::string, std::string>> readFile(const std::string & fil
 			}
 		}
 
-		file.close();
-	} 
+		file.close(); */
+	//} 
 	 
-  return result;
+  // return result;
+}
+
+std::vector<std::map<std::string, std::string>> 
+handleFile(const std::string & fileName, char separator) {
+	std::vector<std::string> lines = readFile(fileName);
+	std::vector<std::map<std::string, std::string>> result;
+	std::map<std::string, std::string> item;
+
+	for (const std::string & line : lines) {
+			if (isBlank(line) && item.size() != 0) {
+				result.push_back(item);
+				item.clear();
+			} else {
+				if (line.find(separator) != std::string::npos) {
+					std::vector<std::string> tokenizedLine = tokenize(line, ':');
+					std::string key = normalizeLine(tokenizedLine[0]);
+					std::string val = normalizeLine(tokenizedLine[1]);
+
+					item[key] = val; 
+				}
+			}
+	}
+
+	return result;
 }
 
 bool chance(int percent) {
@@ -139,9 +180,22 @@ std::ostream& clrl(std::ostream& out) {
     return out;
 }
 
+
+template <class T>
+void print(const std::vector<T> &v) {
+  for (size_t i = 0, size = v.size(); i < size; i++) {
+    std::cout << v[i] << ", ";
+  }
+
+  std::cout << '\n';
+}
+
+
+template void print<std::string>(const std::vector<std::string> &v);
+
 /* 
 
-Example:
+asim Example:
 
 asim(i, 0, 100, 0):     | asim(i, 0, 100, 1):   | asim(i, 0, 100, 5):   | asim(i, 0, 100, 10):
 ----------------------------------------------------------------------------------------------

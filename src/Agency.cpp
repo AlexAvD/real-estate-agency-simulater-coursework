@@ -36,11 +36,17 @@ Date Agency::getDate() const {
 
 void Agency::simulate() {
   for (int day = 0; day < workDays_; day++) {
-    for (int hour = 0; day < workHours_; hour++) {
-      for (Realtor & realtor : realtors_) { 
+    date_.setTime("07:00:00");
+
+    for (int hour = 0; hour < workHours_; hour++) {
+      date_.addHours(1);
+      
+      for (Realtor &realtor : realtors_) { 
         realtor.work();
       }
     } 
+
+    date_.addDays(1);
   }
 } 
 

@@ -17,11 +17,19 @@
             "args": [
                 "-c",
                 "mingw32-make"
-            ]
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
         },
         {
             "label": "build & run",
-            "type": "shell",
+            "type": "shell", 
             "group": {
                 "kind": "test",
                 "isDefault": true
@@ -37,7 +45,7 @@
                 "mingw32-make run"
             ],
             "presentation": {
-                "echo": true,
+                "echo": false,
                 "reveal": "always",
                 "focus": false,
                 "panel": "shared",
@@ -58,6 +66,25 @@
                 "-c",
                 "mingw32-make clean"
             ]
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "group": "test",
+            "command": "start",
+            "args": [
+                "cmd", 
+                "/k",
+                "\"${workspaceRoot}/bin/main.exe\""
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false,
+            }
         }
     ]
 }

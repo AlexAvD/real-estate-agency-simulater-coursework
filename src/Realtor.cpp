@@ -8,10 +8,16 @@ Realtor::Realtor() {
   agency_ = nullptr;
 }
 
-Realtor::Realtor(Agency *agency) {
-  currentBuyer_ = nullptr;
-  currentSeller_ = nullptr;
+Realtor::Realtor(Agency *agency) : Realtor() {
   agency_ = agency;
+}
+
+Realtor::Realtor(const Realtor &realtor) : Person(realtor) {  
+  experience_ = realtor.experience_;
+  charisma_ = realtor.charisma_;
+  currentBuyer_ = realtor.currentBuyer_;
+  currentSeller_ = realtor.currentSeller_;
+  agency_ = realtor.agency_;
 }
 
 void Realtor::setBuyer(Buyer *buyer) {
@@ -23,7 +29,7 @@ void Realtor::setSeller(Seller *seller) {
 }
 
 /* Buyer* Realtor::searchBuyer() {
-  int percent = asymp(experience_, 20, 40, 2);
+  int percent = asymp(experience_, 10, 40, 2);
 
   if (chance(percent)) {
     Seller seller = Seller::generate();
@@ -35,21 +41,27 @@ void Realtor::setSeller(Seller *seller) {
   return nullptr;
 }
  */
-Seller* Realtor::searchSeller() {
-  int percent = asymp(experience_, 20, 60, 2);
+void Realtor::searchSeller() {
+  if (!currentBuyer_) {
+    int percent = asymp(experience_, 20, 60, 2);
 
-  if (chance(percent)) {
-    Seller seller = Seller::generate();
-    agency_->addSeller(seller);
-
-    return agency_->getLastAddedSeller();
+    if (chance(percent)) {
+      Seller seller = Seller::generate();
+      agency_->addSeller(seller);
+      currentSeller_ = agency_->getLastAddedSeller();
+    }
   }
-
-  return nullptr;
 }
 
+void Realtor::concludeContract() {
+  
+}
 
 void Realtor::work() {
+  searchSeller();
+  concludeContract();
+  
+
   /* if (!currentSeller_) {
     Seller *seller = searchSeller();
     
@@ -73,9 +85,9 @@ std::ostream& Realtor::print(std::ostream &out) const {
   Realtor::Person::print(out);
 
   out 
-    << "Experience: " << experience_ 
+    << "Опыт: " << experience_ 
     << '\n'
-    << "Charisma: " << charisma_;
+    << "Харизма: " << charisma_;
 
   return out;
 }

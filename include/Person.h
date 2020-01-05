@@ -13,6 +13,8 @@ class Person {
     static const std::vector<std::vector<std::string>> names_;
     static const std::vector<std::vector<std::string>> surnames_;
     static const std::vector<std::vector<std::string>> midnames_;
+
+  protected:
     std::string name_;
     std::string surname_;
     std::string midname_;
@@ -34,10 +36,6 @@ class Person {
     Person(const Person & person);
 
     static Person generate();
-
-    friend class Client;
-    friend class Seller;
-    friend class Buyer;
 
      // setters
     void setName(const std::string & name);

@@ -16,50 +16,47 @@
 #include "Realtor.h"
 #include "Agency.h"
 
+#include "RealEstate.h"
+#include "Flat.h"
+
+
 using std::cout;
 using std::endl;
 
 int main() {	 
-	setRus();
-/* 
-	cout << Person::generate() << endl;
-	cout << Person::generate(); */
+	setConsoleUTF8();
 
-
-	/* for (int i = 0; i < 5; i++) {
-		cout << Random::getInt(10, 99) << endl;
-	} 
- */
- 
-
-
-	/* cout << Person::generate() << "\n\n";
-	cout << Person::generate();  */
-
-	// cout << '"' << trim(" a ") << '"';
-
-	/* print<std::string>({
-		trim("  a  "), 
-		"lol"
-	}); */
-
-	/* Seller s = Seller::generate();
-	Person *pp = &s;
-
-	cout << *pp; */
-
-	// std::vector<std::string> lines = readFile("./data/properties.txt");
-	// cout << handleLines(, ':');
-
-	// cout << lines;
-	
-	// cout << *test() << '\n';
-	
+  /* 
 	Person r = Person::generate();
+	Client c = Client::generate();
+	Seller s = Seller::generate();
 
-	cout << r;
+	cout << r << '\n'; 
+	cout << c << '\n';
+	cout << s << '\n';  
+	*/
 
-	return 0; 
+	// Person p = Realtor();
+
+	/* Flat f;
+
+	f.setBalcony(true);
+	f.setArea(300);
+
+	Flat f1(f);
+
+	cout << f1; */
+
+	Flat flat;
+
+	flat.setRandomProperties();
+
+	cout << flat; 
+
+
+
+
+	return 0;  
 }
 
-  
+    

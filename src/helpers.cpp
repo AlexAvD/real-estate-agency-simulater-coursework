@@ -1,6 +1,6 @@
 #include "helpers.h"
 
-void setRus() {
+void setConsoleUTF8() {
   system("chcp 65001 > nul");
 }
 
@@ -49,7 +49,7 @@ std::string normalizeLine(const std::string & str) {
 
   return (tokens.size() != 0) ? concat(tokens, ' ') : "";
 }
-
+ 
 std::string trim(const std::string & str) {
   size_t start = -1;
   size_t end = str.length();
@@ -63,21 +63,20 @@ std::string trim(const std::string & str) {
   return str.substr(start, end - start + 1);
 }
 
-std::string concat(const std::vector<std::string> & strings, char ch) {
+
+std::string concat(const std::vector<std::string> & strings, char divider) {
   std::string result = "";
   size_t i = -1;
   size_t len = strings.size() - 1;
 
   while (++i < len) {
-    result += strings[i] + ch;
+    result += strings[i] + divider;
   }
 
   result += strings[i];
 
   return result;
 }
-
-//std::vector<std::map<std::string, std::string>> 
 
 std::vector<std::string> readFile(const std::string & fileName) {
 	std::ifstream file(fileName);
@@ -94,36 +93,6 @@ std::vector<std::string> readFile(const std::string & fileName) {
 	}
 
 	return result;
-
-	/* std::ifstream file(fileName);
-	std::vector<std::map<std::string, std::string>> result;
-	
-
-	if (file.is_open()) {
-		std::map<std::string, std::string> item;
-		std::string line;
-
-		while (!file.eof()) {
-			getline(file, line);
-
-			if (isBlank(line) && item.size() != 0) {
-				result.push_back(item);
-				item.clear();
-			} else {
-				if (line.find(':') != std::string::npos) {
-					std::vector<std::string> tokenizedLine = tokenize(line, ':');
-					std::string key = normalizeLine(tokenizedLine[0]);
-					std::string val = normalizeLine(tokenizedLine[1]);
-
-					item[key] = val; 
-				}
-			}
-		}
-
-		file.close(); */
-	//} 
-	 
-  // return result;
 }
 
 std::vector<std::map<std::string, std::string>> 
@@ -216,7 +185,22 @@ asim(i, 0, 100, 0):     | asim(i, 0, 100, 1):   | asim(i, 0, 100, 5):   | asim(i
 */
 
 double asymp(double num, double min, double max, double growRate) {
-	growRate = (growRate < 1) ? 1 : growRate;
+	if (num < 0) {
+		num = 0;
+	}
+
+	if (growRate <= 0) {
+		growRate = 0;
+		num = 1;
+	}
 
 	return (max * num + min * growRate) / (num + growRate);
+}
+
+void wait(int ms) {
+ std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+int roundTo(int num, int digit) {
+  return (num % digit) ? (num + digit * getSign(num) - (num % digit)) : num;
 }

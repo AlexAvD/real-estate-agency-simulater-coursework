@@ -197,12 +197,12 @@ std::ostream& operator<<(std::ostream &out, const Person &person) {
 }
 
 std::ostream& Person::print(std::ostream &out) const {
-  out << "Full name: " << getFullName() << '\n'
-      << "Gender: " << getGender() << '\n'
-      << "Age: " << getAge() << '\n'
-      << "Passport data: " << getPassportData() << '\n'
-      << "Salary: " << getSalary() << " руб." << '\n'
-      << "Money: " << getMoney() << " руб." << '\n';
+  out << "ФИО: " << getFullName() << '\n'
+      << "Пол: " << getGender() << '\n'
+      << "Возраст: " << getAge() << '\n'
+      << "Паспортные данные: " << getPassportData() << '\n'
+      << "Зарплата: " << getSalary() << " руб." << '\n'
+      << "Деньги: " << getMoney() << " руб." << '\n';
 
   return out;
 }

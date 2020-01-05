@@ -11,10 +11,10 @@ int Random::getInt(int min = 0, int max = RAND_MAX) {
 }
 
 bool Random::getBool() {
-  return getInt(0, 1);
+  return (bool)getInt(0, 1);
 }
 
 int Random::randInt() {
   return gen_(engine_);
 }
- 
+  

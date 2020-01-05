@@ -4,9 +4,9 @@
 #include "Person.h"
 #include "RealEstate.h"
 
-class Seller;
+// class Seller;
 class Client : public Person {
-  private:
+  protected:
     // int type; // тип клиента: 0 - продавец, 1 - покупатель, 
     RealEstate *realEstate_;
 
@@ -16,8 +16,6 @@ class Client : public Person {
     Client(const Person &person, RealEstate *RealEstate);
 
     static Client generate();
-
-    friend class Seller;
 
     void setRealEstate(RealEstate *realEstate);
 

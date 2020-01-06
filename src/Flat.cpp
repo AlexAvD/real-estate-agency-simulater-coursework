@@ -5,7 +5,7 @@ const std::vector<std::string> Flat::layouts_ = {
   "С Изолированными комнатами", "Со смежными комнатами"
 };
 
-Flat::Flat() {
+Flat::Flat() : RealEstate() {
   floor_ = 0;
   newBuilding_ = false;
   balcony_ = false;
@@ -19,6 +19,14 @@ Flat::Flat(const Flat &flat) : RealEstate(flat) {
   balcony_ = flat.balcony_;
   lift_ = flat.lift_;
   layout_ = flat.layout_;
+}
+
+Flat Flat::generate() {
+  Flat flat;
+
+  flat.setRandomProperties();
+
+  return flat;
 }
 
 // setters
@@ -64,8 +72,7 @@ std::string Flat::getLayout() const {
 }
 
 // others
-
-Flat &Flat::setRandomProperties() {
+void Flat::setRandomProperties() {
   Flat::RealEstate::setRandomProperties(0);
 
   int floors = getFloors();

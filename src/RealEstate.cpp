@@ -51,20 +51,9 @@ RealEstate::RealEstate() {
   area_ = 0;
   buildYear_ = 0;
   floors_ = 0;
+  rooms_ = 0;
   furniture_ = false;
   owner_ = nullptr;
-}
-
-RealEstate::RealEstate(
-  std::string type, std::string street, std::string district, 
-  int area, int buildYear, Person * owner
-) {
-  street_ = street;
-  district_ = district;
-  type_ = type;
-  area_ = area;
-  buildYear_ = buildYear;
-  owner_ = owner;
 }
 
 RealEstate::RealEstate(const RealEstate & realEstate) {
@@ -73,16 +62,11 @@ RealEstate::RealEstate(const RealEstate & realEstate) {
   type_ = realEstate.type_;
   area_ = realEstate.area_;
   buildYear_ = realEstate.buildYear_;
+  floors_ = realEstate.floors_;
+  rooms_ = realEstate.rooms_;
+  furniture_ = realEstate.furniture_;
   owner_ = realEstate.owner_;
 }
-
-/* std::vector<std::vector<std::string>> *RealEstate::getTypes() {
-  return &types_;
-}
-
-std::vector<std::pair<std::string, std::vector<std::string>>> *RealEstate::getDistrictsAndStreets() {
-  return &districtsAndStreets_;
-} */
 
 // setters
 void RealEstate::setArea(int area) {
@@ -95,6 +79,10 @@ void RealEstate::setBuildYear(int year) {
 
 void RealEstate::setFloors(int floors) {
   floors_ = floors;
+}
+
+void RealEstate::setRooms(int rooms) {
+  rooms_ = rooms;
 }
 
 void RealEstate::setFurniture(bool furniture) {
@@ -121,10 +109,6 @@ void RealEstate::setOwner(Person *person) {
   owner_ = person;
 }
 
-std::ostream &operator<<(std::ostream &out, const RealEstate &realEstate) {
-  return realEstate.print(out);
-}
-
 // getters
 int RealEstate::getArea() const {
   return area_;
@@ -135,6 +119,10 @@ int RealEstate::getBuildYear() const {
 }
 
 int RealEstate::getFloors() const {
+  return floors_;
+}
+
+int RealEstate::getRooms() const {
   return floors_;
 }
 
@@ -158,7 +146,7 @@ std::string RealEstate::getType() const {
   return type_;
 }
 
-RealEstate &RealEstate::setRandomProperties(int typeOfConstruction) {
+void RealEstate::setRandomProperties(int typeOfConstruction) {
   int typesSize = types_[0].size();
 
   if (!isBetween<int>(typeOfConstruction, 0, typesSize - 1)) {
@@ -170,17 +158,21 @@ RealEstate &RealEstate::setRandomProperties(int typeOfConstruction) {
 
   int floors;
   int area;
+  int rooms;
  
   if (typeOfConstruction == 0) {  
     floors = roundTo(Random::getInt(5, 25), 5);
-    area = Random::getInt(20, 50);
+    area = Random::getInt(50, 100);
+    rooms = Random::getInt(1, 3);
   } else if (typeOfConstruction == 1) {
     floors = Random::getInt(1, 4);
     area = Random::getInt(100, 300);
+    rooms = Random::getInt(2, 4) * floors / 2;
   }
 
   setFloors(floors);
   setArea(area);
+  setRooms(rooms);
 
   std::pair<std::string, std::vector<std::string>> districtAndStreets = 
     districtsAndStreets_[Random::getInt(0, districtsAndStreets_.size() - 1)];
@@ -195,8 +187,6 @@ RealEstate &RealEstate::setRandomProperties(int typeOfConstruction) {
   setRepair(Random::getBool());
   setFurniture(Random::getBool());
   setBuildYear(2000 + Random::getInt(0, 19));
-
-  return *this;
 }
 
 std::ostream &RealEstate::print(std::ostream &out) const {
@@ -207,6 +197,7 @@ std::ostream &RealEstate::print(std::ostream &out) const {
     << "Владелец: " << ((owner_ == nullptr) ? "" : owner_->getFullName()) << '\n'
     << "Год постройки: " << buildYear_ << '\n'
     << "Площадь: " << area_ << " м^2" << '\n'
+    << "Кол-во комнат: " << rooms_ << '\n'
     << "Ремонт: " << (repair_ ? "Есть" : "Нет")  << '\n'
     << "Мебель: " << (furniture_ ? "Есть" : "Нет") << '\n'
     << "Этажность: " << floors_ << '\n';
@@ -214,3 +205,6 @@ std::ostream &RealEstate::print(std::ostream &out) const {
   return out;
 }
 
+std::ostream &operator<<(std::ostream &out, const RealEstate &realEstate) {
+  return realEstate.print(out);
+}

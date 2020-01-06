@@ -26,16 +26,7 @@ class Person {
 
   public:
     Person();
-
-    Person(std::string name, std::string surname, std::string midname, 
-      bool gender, std::string passportData, int age, int salary, long money = 0);
-
-    Person(std::string fullName, bool gender, std::string passportData, 
-      int age, int salary, long money = 0);
-
     Person(const Person & person);
-
-    static Person generate();
 
      // setters
     void setName(const std::string & name);
@@ -47,6 +38,7 @@ class Person {
     void setAge(int age);
     void setSalary(int salary);
     void setMoney(long money);
+    void setRandomProperties();
 
     // getters
     std::string getName() const;
@@ -59,8 +51,8 @@ class Person {
     int getSalary() const;
     long getMoney() const;
 
-    // Person &operator=(const Person & p);
-
+    // others
+  
     virtual std::ostream& print(std::ostream &out) const;
     friend std::ostream& operator<<(std::ostream &out, const Person &person);
 };

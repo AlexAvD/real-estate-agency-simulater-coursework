@@ -4,20 +4,26 @@ Seller::Seller() : Client() {
 
 }
 
-Seller::Seller(const Person &person) : Client(person) {
+Seller::Seller(const Seller &seller) : Client(seller) {
 
 }
 
-Seller::Seller(const Person &person, RealEstate *realEstate) : Client(person, realEstate) {
+void Seller::setRandomProperties() {
+  Seller::Client::setRandomProperties();
 
+  setType(Random::getInt(0, 1));
+  setMoney(Random::getInt(100000, 500000));
 }
 
 Seller Seller::generate() {
-  return Seller(Seller::Client::Person::generate());
+  Seller seller;
+
+  seller.setRandomProperties();
+
+  return seller;
 }
 
 std::ostream& Seller::print(std::ostream &out) const {
-
   out << "=== SELLER ===" << '\n';
 
   return Client::print(out);

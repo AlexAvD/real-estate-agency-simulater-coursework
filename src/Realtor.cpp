@@ -1,6 +1,6 @@
 #include "Realtor.h"
 
-Realtor::Realtor() {
+Realtor::Realtor() : Person() {
   experience_ = 0;
   charisma_ = 0.5;
   currentBuyer_ = nullptr;
@@ -20,15 +20,68 @@ Realtor::Realtor(const Realtor &realtor) : Person(realtor) {
   agency_ = realtor.agency_;
 }
 
-void Realtor::setBuyer(Buyer *buyer) {
+Realtor Realtor::generate() {
+  Realtor realtor;
+
+  realtor.setRandomProperties();
+
+  return realtor;
+}
+
+// setters
+
+void Realtor::setExperience(int experience) {
+  experience_ = experience;
+}
+
+void Realtor::setCharisma(float charisma) {
+  charisma_ = charisma;
+}
+
+void Realtor::setCurrentBuyer(Buyer *buyer) {
   currentBuyer_ = buyer;
 }
 
-void Realtor::setSeller(Seller *seller) {
+void Realtor::setCurrentSeller(Seller *seller) {
   currentSeller_ = seller;
 }
 
-/* Buyer* Realtor::searchBuyer() {
+// getters
+
+int Realtor::getExperience() const {
+  return experience_;
+}
+
+float Realtor::getCharisma() const {
+  return charisma_;
+}
+
+Buyer *Realtor::getCurrentBuyer() const {
+  return currentBuyer_;
+}
+
+Seller *Realtor::getCurrentSeller() const {
+  return currentSeller_;
+}
+
+void Realtor::setRandomProperties() {
+  Realtor::Person::setRandomProperties();
+
+  setExperience(Random::getInt(0, 20));
+  setCharisma(Random::getInt(30, 90) / 100.);
+}
+
+
+void Realtor::searchClient() {
+  Buyer *buyer;
+  Seller *seller;
+
+  if (!currentClient_) {
+    buyer = searchBuyer();
+  } 
+}
+
+Buyer* Realtor::searchBuyer() {
   int percent = asymp(experience_, 10, 40, 2);
 
   if (chance(percent)) {
@@ -40,9 +93,9 @@ void Realtor::setSeller(Seller *seller) {
 
   return nullptr;
 }
- */
-void Realtor::searchSeller() {
-  if (!currentBuyer_) {
+
+Seller *Realtor::searchSeller() {
+  if (!currentSeller_) {
     int percent = asymp(experience_, 20, 60, 2);
 
     if (chance(percent)) {
@@ -51,7 +104,11 @@ void Realtor::searchSeller() {
       currentSeller_ = agency_->getLastAddedSeller();
     }
   }
+
+  return nullptr;
 }
+
+
 
 void Realtor::concludeContract() {
   
@@ -75,10 +132,6 @@ void Realtor::work() {
   if (!seller) {
 
   } */
-}
-
-int Realtor::getExperience() const {
-  return experience_;
 }
 
 std::ostream& Realtor::print(std::ostream &out) const {

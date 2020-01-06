@@ -52,32 +52,6 @@ Person::Person() {
   money_ = 0;
 }
 
-Person::Person(
-  std::string name, std::string surname, std::string midname, bool gender, 
-  std::string passportData, int age, int salary, long money
-) {
-  setName(name);
-  setSurname(surname);
-  setMidname(midname);
-  setGender(gender);
-  setPassportData(passportData);
-  setAge(age);
-  setSalary(salary);
-  setMoney(money);
-}
-
-Person::Person(
-  std::string fullName, bool gender, std::string passportData, 
-  int age, int salary, long money
-) {
-  setFullName(fullName);
-  setGender(gender);
-  setPassportData(passportData);
-  setAge(age);
-  setSalary(salary);
-  setMoney(money);
-}
-
 Person::Person(const Person & person) {
   name_ = person.name_;
   surname_ = person.surname_;
@@ -87,27 +61,6 @@ Person::Person(const Person & person) {
   age_ = person.age_;
   salary_ = person.salary_;
   money_ = person.money_;
-}
-
-Person Person::generate() {
-  std::stringstream ss;
-  
-  bool gender = Random::getBool();
-  std::string name = names_[gender][Random::getInt(0, names_.size() - 1)];
-  std::string surname = surnames_[gender][Random::getInt(0, surnames_.size() - 1)];
-  std::string midname = midnames_[gender][Random::getInt(0, midnames_.size() - 1)];
-  int age = Random::getInt(25, 60);
-  int salary = Random::getInt(20, 150) * 1000;
-
-  ss.fill('0');
-  ss 
-    << "60" << Random::getInt(80, 99) 
-    << std::setw(3) << Random::getInt(0, 500) 
-    << std::setw(3) << Random::getInt(0, 999);
- 
-  std::string passortData = ss.str();  
-
-  return Person(name, surname, midname, gender, passortData, age, salary);
 }
 
 // setters
@@ -150,6 +103,27 @@ void Person::setSalary(int salary) {
 
 void Person::setMoney(long money) {
   money_ = money;
+}
+
+
+void Person::setRandomProperties() {
+  setGender(Random::getBool());
+  setName(names_[gender_][Random::getInt(0, names_.size() - 1)]);
+  setSurname(surnames_[gender_][Random::getInt(0, surnames_.size() - 1)]);
+  setMidname(midnames_[gender_][Random::getInt(0, midnames_.size() - 1)]);
+  setAge(Random::getInt(25, 60));
+  setSalary(Random::getInt(20, 150) * 1000);
+  setMoney(Random::getInt(50000, 200000));
+
+  std::stringstream ss;
+
+  ss.fill('0');
+  ss 
+    << "60" << Random::getInt(80, 99) 
+    << std::setw(3) << Random::getInt(0, 500) 
+    << std::setw(3) << Random::getInt(0, 999);
+  
+  setPassportData(ss.str());
 }
 
 // getters
@@ -198,11 +172,11 @@ std::ostream& operator<<(std::ostream &out, const Person &person) {
 
 std::ostream& Person::print(std::ostream &out) const {
   out << "ФИО: " << getFullName() << '\n'
-      << "Пол: " << getGender() << '\n'
-      << "Возраст: " << getAge() << '\n'
-      << "Паспортные данные: " << getPassportData() << '\n'
-      << "Зарплата: " << getSalary() << " руб." << '\n'
-      << "Деньги: " << getMoney() << " руб." << '\n';
+      << "Пол: " << (gender_ ? "муж." : "жен.") << '\n'
+      << "Возраст: " << age_ << '\n'
+      << "Паспортные данные: " << passportData_ << '\n'
+      << "Зарплата: " << salary_ << " руб." << '\n'
+      << "Деньги: " << money_ << " руб." << '\n';
 
   return out;
 }

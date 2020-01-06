@@ -47,12 +47,10 @@ int main() {
 
 	cout << f1; */
 
-	Flat flat;
-
-	flat.setRandomProperties();
-
-	cout << flat; 
-
+	// flat.setRandomProperties();
+ 
+	// cout << ss.str(); 
+	// cout << Flat::generate();
 
 
 

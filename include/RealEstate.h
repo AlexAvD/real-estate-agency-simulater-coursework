@@ -11,6 +11,7 @@ class RealEstate {
     int area_;
     int buildYear_;
     int floors_;
+    int rooms_;
     bool furniture_;
     bool repair_;
     std::string street_;
@@ -24,27 +25,26 @@ class RealEstate {
 
   public:
     RealEstate();
-    RealEstate(
-      std::string type, std::string street, std::string district, 
-      int area, int buildYear, Person *owner = nullptr
-    );
     RealEstate(const RealEstate &realEstate);
 
     // setters
     void setArea(int area);
     void setBuildYear(int year);
     void setFloors(int floors);
+    void setRooms(int rooms);
     void setFurniture(bool furniture);
     void setRepair(bool furniture);
     void setStreet(std::string street);
     void setDistrict(std::string district);
     void setType(std::string type);
     void setOwner(Person *person);
+    void setRandomProperties(int typeOfConstruction = -1);
 
     // getters
     int getArea() const;
     int getBuildYear() const;
     int getFloors() const;
+    int getRooms() const;
     bool getRepair() const;
     bool getFurniture() const;
     std::string getStreet() const;
@@ -53,7 +53,6 @@ class RealEstate {
     Person *getOwner() const;
     
     // others
-    virtual RealEstate &setRandomProperties(int typeOfConstruction = -1);
     virtual std::ostream &print(std::ostream &out) const;
     friend std::ostream &operator<<(std::ostream &out, const RealEstate &realEstate);
 };

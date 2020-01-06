@@ -1,33 +1,52 @@
 #include "Client.h"
 
+const std::vector<std::string> Client::types_ {
+  "Продавец",
+  "Покупатель",
+  "Арендодатель",
+  "Арендатор"
+};
+
 Client::Client() : Person() {
+  type_ = -1;
   realEstate_ = nullptr;
 }
 
-Client::Client(const Person &person) : Person(person) {
+Client::Client(const Client &client) : Person(client) {
+  type_ = -1;
   realEstate_ = nullptr;
 }
 
-Client Client::generate() {
-  return Client(Client::Person::generate());
-}
+// setters
 
-Client::Client(const Person &person, RealEstate *realEstate) : Person(person) {
-  realEstate_ = realEstate;
+void Client::setType(int type) {
+  type_ = type;
 }
 
 void Client::setRealEstate(RealEstate *realEstate) {
   realEstate_ = realEstate;
 }
 
-RealEstate * Client::getRealEstate() const {
+void Client::setRandomProperties() {
+  Client::Person::setRandomProperties();
+}
+
+// getters
+
+int Client::getType() const {
+  return type_;
+}
+
+RealEstate *Client::getRealEstate() const {
   return realEstate_;
 }
 
-std::ostream& Client::print(std::ostream &out) const {
-  out << "=== CLIENT ===" << '\n';
+// others
 
-  return Person::print(out);
+std::ostream &Client::print(std::ostream &out) const {
+  Person::print(out);
+
+  return out;
 }
 
 /* std::ostream& operator<<(std::ostream &out, const Client &client) {

@@ -1,26 +1,34 @@
 #pragma once
 
 #include <iostream>
+#include <string>
+#include <vector>
 #include "Person.h"
 #include "RealEstate.h"
 
-// class Seller;
 class Client : public Person {
-  protected:
-    // int type; // тип клиента: 0 - продавец, 1 - покупатель, 
+  private:
+    // тип клиента: 
+    // 0 - продавец, 1 - арендодатель, 
+    // 2 - покупатель, 3 - арендатор
+    int type_; 
     RealEstate *realEstate_;
+
+  protected: 
+    static const std::vector<std::string> types_;
 
   public:
     Client();
-    Client(const Person &person);
-    Client(const Person &person, RealEstate *RealEstate);
+    Client(const Client &client);
 
-    static Client generate();
-
+    // setters
+    void setType(int type = -1);
     void setRealEstate(RealEstate *realEstate);
+    void setRandomProperties();
 
-    RealEstate * getRealEstate() const;
+    // getters
+    int getType() const;
+    RealEstate *getRealEstate() const;
 
-    virtual std::ostream& print(std::ostream &out) const override;
-
+    virtual std::ostream &print(std::ostream &out) const override;
 };

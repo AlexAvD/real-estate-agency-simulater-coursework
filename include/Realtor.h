@@ -6,7 +6,6 @@
 #include "Agency.h"
 #include "Buyer.h"
 #include "Seller.h"
-#include "Contract.h"
 
 class Agency;
 class Realtor : public Person {
@@ -14,34 +13,42 @@ class Realtor : public Person {
     int experience_;
     float charisma_;
     Agency *agency_;
+    Client *currentClient_;
     Buyer *currentBuyer_;
     Seller *currentSeller_;
-    Contract *currentContract_;
     std::stack<Seller*> sellers_;
-    std::stack<Contract> contracts_;
+    std::stack<Buyer*> buyer_;
 
   public: 
     Realtor();
     Realtor(Agency* agencry);
     Realtor(const Realtor &realtor);
 
+    static Realtor generate();
+
     // setters
     void setExperience(int experience);
-    void setBuyer(Buyer *buyer);
-    void setSeller(Seller *seller);
+    void setCharisma(float charisma);
+    void setCurrentClient(Client *buyer);
+    void setCurrentBuyer(Buyer *buyer);
+    void setCurrentSeller(Seller *seller);
+    void setRandomProperties();
  
     // getters
     int getExperience() const;
-    Client* getCurrentBuyer() const;
-    Client* getCurrentSeller() const;
+    float getCharisma() const;
+    Client *getCurrentClient() const;
+    Buyer *getCurrentBuyer() const;
+    Seller *getCurrentSeller() const;
 
     // others
     void addBuyer(Client *buyer);
     void addSeller(Client *seller);
 
     void work();
-    void searchBuyer();
-    void searchSeller();
+    void searchClient();
+    Buyer *searchBuyer();
+    Seller *searchSeller();
     void concludeContract();
     
     virtual std::ostream& print(std::ostream &out) const override;

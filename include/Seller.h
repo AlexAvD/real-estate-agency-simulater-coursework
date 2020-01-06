@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Person.h"
+#include <iostream>
 #include "Client.h"
 #include "RealEstate.h"
 
@@ -9,8 +9,9 @@ class Seller : public Client {
 
   public:
     Seller();
-    Seller(const Person &person);
-    Seller(const Person &person, RealEstate *realEstate);
+    Seller(const Seller &seller);
+
+    void setRandomProperties();
 
     static Seller generate();
 

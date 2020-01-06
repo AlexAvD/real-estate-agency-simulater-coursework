@@ -54,6 +54,6 @@ void Agency::addSeller(Seller seller) {
   sellers_.push(seller);
 }
 
-void Agency::addBuyer(Buyer buyer) {
-  sellers_.push(buyer);
+void Agency::addBuyer(Buyer buyer) { 
+  buyers_.push(buyer);
 }

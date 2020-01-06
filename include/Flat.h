@@ -17,6 +17,8 @@ class Flat : public RealEstate {
   public:
     Flat();
     Flat(const Flat &flat);
+
+    static Flat generate();
    
     // settesr
     void setFloor(int floor);
@@ -24,6 +26,7 @@ class Flat : public RealEstate {
     void setBalcony(bool balcony);
     void setLift(bool lift);
     void setLayout(std::string layout);
+    void setRandomProperties();
 
     // getters
     int getFloor() const;
@@ -33,7 +36,6 @@ class Flat : public RealEstate {
     std::string getLayout() const;
 
     // others
-    virtual Flat &setRandomProperties();
     virtual std::ostream &print(std::ostream &out) const override;
 
 };

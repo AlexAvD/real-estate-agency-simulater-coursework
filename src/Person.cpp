@@ -15,12 +15,12 @@ const std::vector<std::vector<std::string>> Person::names_ = {
 
 const std::vector<std::vector<std::string>> Person::surnames_ = {
   {
-    "Зыкова", "Киселёва", "Казакова", "Горбачёва", "Щербакова", "Зимина", "Наумова", 
+    "Киселёва", "Казакова", "Горбачёва", "Щербакова", "Зимина", "Наумова", "Зыкова",
     "Ермакова", "Маркова", "Федотова", "Зиновьева", "Меркушева", "Кулакова", "Овчинникова", 
     "Алексеева", "Лаврентьева", "Ильина", "Тетерина", "Федосеева", "Муравьёва"
   },
   {
-    "Зыков", "Афанасьев", "Фокин", "Колобов", "Богданов", "Самсонов", "Лукин", 
+    "Афанасьев", "Фокин", "Колобов", "Богданов", "Самсонов", "Лукин", "Зыков",
     "Фомичёв", "Владимиров", "Николаев", "Моисеев", "Фомин", "Самойлов", "Блинов", 
     "Дьячков", "Туров", "Орехов", "Субботин", "Фадеев", "Наумов",
   }
@@ -63,6 +63,36 @@ Person::Person(const Person & person) {
   money_ = person.money_;
 }
 
+std::string Person::getRandomName(int gender) {
+  if (gender == -1) {
+    gender = Random::getInt(0, 1);
+  } else {
+    gender %= 2;
+  }
+
+  return names_[gender][Random::getInt(0, names_.size() - 1)];
+}
+
+std::string Person::getRandomSurname(int gender) {
+  if (gender == -1) {
+    gender = Random::getInt(0, 1);
+  } else {
+    gender %= 2;
+  }
+
+  return surnames_[gender][Random::getInt(0, surnames_.size() - 1)];
+}
+
+std::string Person::getRandomMidname(int gender) {
+  if (gender == -1) {
+    gender = Random::getInt(0, 1);
+  } else {
+    gender %= 2;
+  }
+
+  return midnames_[gender][Random::getInt(0, midnames_.size() - 1)];
+}
+
 // setters
 
 void Person::setName(const std::string & name) {
@@ -89,6 +119,14 @@ void Person::setGender(bool gender) {
   gender_ = gender;
 }
 
+void Person::setGender(const std::string &gender) {
+  if (gender.find("м") != std::string::npos || gender.find("М") != std::string::npos) {
+    gender_ = 1;
+  } else if (gender.find("ж") != std::string::npos || gender.find("Ж") != std::string::npos) {
+    gender_ = 0;
+  }
+}
+
 void Person::setPassportData(const std::string & passportData) {
   passportData_ = passportData;
 }
@@ -97,20 +135,32 @@ void Person::setAge(int age) {
   age_ = age;
 }
 
+void Person::setAge(const std::string &age) {
+  age_ = std::stoi(age);
+}
+
 void Person::setSalary(int salary) {
   salary_ = salary;
+}
+
+void Person::setSalary(const std::string &salary) {
+  salary_ = std::stoi(salary);
 }
 
 void Person::setMoney(long money) {
   money_ = money;
 }
 
+void Person::setMoney(const std::string &money) {
+  money_ = std::stol(money);
+}
+
 
 void Person::setRandomProperties() {
   setGender(Random::getBool());
-  setName(names_[gender_][Random::getInt(0, names_.size() - 1)]);
-  setSurname(surnames_[gender_][Random::getInt(0, surnames_.size() - 1)]);
-  setMidname(midnames_[gender_][Random::getInt(0, midnames_.size() - 1)]);
+  setName(getRandomName());
+  setSurname(getRandomSurname());
+  setMidname(getRandomMidname());
   setAge(Random::getInt(25, 60));
   setSalary(Random::getInt(20, 150) * 1000);
   setMoney(Random::getInt(50000, 200000));
@@ -165,6 +215,10 @@ int Person::getSalary() const {
 long Person::getMoney() const {
   return money_;
 }
+
+
+
+// others
 
 std::ostream& operator<<(std::ostream &out, const Person &person) {
   return person.print(out);

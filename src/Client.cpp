@@ -37,6 +37,10 @@ int Client::getType() const {
   return type_;
 }
 
+std::string Client::getTypeAsString() const {
+  return types_[type_];
+}
+
 RealEstate *Client::getRealEstate() const {
   return realEstate_;
 }

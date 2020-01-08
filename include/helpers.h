@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <stack>
 #include <algorithm>
 #include <cmath>
 #include <chrono>
@@ -39,21 +40,32 @@ bool chance(int percent = 100);
 int countEqualElements(const std::vector<std::string> & src, const std::vector<std::string> & elements);
 
 /* функция считывает файл и возвращает vector состоящий из строк файла */
-std::vector<std::string> readFile(const std::string & fileName);
+std::vector<std::string> readFile(const std::string & pathToFile);
 
 /** 
- *  функция считывает файл и возвращает vector состоящий из конейнера типа map, 
- *  состоящий из строки разбитой по разделителю "separator"   
+ *  функция считывает файл и возвращает vector состоящий из конейнераов типа map, 
+ *  состоящий из строк разбитых по разделителю "separator"   
  */
-std::vector<std::map<std::string, std::string>> handleFile(const std::string & fileName, char separator);
+std::vector<std::map<std::string, std::string>> handleFile(const std::string & pathToFile, char separator);
 
 /* вывод всех данных контейнреа vector */
 template <class T>
 std::ostream& operator<<(std::ostream &out, const std::vector<T> & vector) {
   for (size_t i = 0, size = vector.size(); i < size; i++) {
-    out << vector[i] << '\n';
+    out << vector[i] << "\n\n";
   }
 
+  return out;
+}
+
+/* вывод всех данных контейнреа stack */
+template <class T>
+std::ostream& operator<<(std::ostream &out, std::stack<T> stack) {
+  while (!stack.empty()) {
+		out << stack.top() << "\n\n";
+
+		stack.pop();
+	} 
   return out;
 }
 

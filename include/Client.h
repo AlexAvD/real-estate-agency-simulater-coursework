@@ -28,6 +28,7 @@ class Client : public Person {
 
     // getters
     int getType() const;
+    std::string getTypeAsString() const;
     RealEstate *getRealEstate() const;
 
     virtual std::ostream &print(std::ostream &out) const override;

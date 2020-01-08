@@ -13,7 +13,7 @@ repair: false
 furniture: true
 floors: 1
 rooms: 3
-street: adsf
+street: 
 district: A
 area: 35
 landArea: 300

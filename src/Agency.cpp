@@ -39,11 +39,17 @@ void Agency::simulate() {
     date_.setTime("07:00:00");
 
     for (int hour = 0; hour < workHours_; hour++) {
-      date_.addHours(1);
-      
       for (Realtor &realtor : realtors_) { 
+        Date realtorDate = realtor.getDate();
+
+        if (realtorDate.getDay() <= date_.getDay() || realtorDate.getHour() <= date_.getHour()) {
+          realtor.setDate(date_);
+        }
+
         realtor.work();
       }
+      
+      date_.addHours(1);
     } 
 
     date_.addDays(1);

@@ -68,7 +68,15 @@ RealEstate::RealEstate(const RealEstate & realEstate) {
   owner_ = realEstate.owner_;
 }
 
+void RealEstate::getRealEstatesFromFile(
+  const std::string &pathToFile, 
+  std::stack<RealEstate> &dist
+) {
+
+}
+
 // setters
+
 void RealEstate::setArea(int area) {
   area_ = area;
 }
@@ -91,6 +99,10 @@ void RealEstate::setFurniture(bool furniture) {
 
 void RealEstate::setRepair(bool repair) {
   repair_ = repair;
+}
+
+void RealEstate::setPrice(long price) {
+  price_ = price;
 }
 
 void RealEstate::setStreet(std::string street) {
@@ -134,6 +146,10 @@ bool RealEstate::getRepair() const {
   return repair_;
 }
 
+long RealEstate::getPrice() const {
+  return price_;
+}
+
 std::string RealEstate::getStreet() const {
   return street_;
 }
@@ -147,10 +163,10 @@ std::string RealEstate::getType() const {
 }
 
 void RealEstate::setRandomProperties(int typeOfConstruction) {
-  int typesSize = types_[0].size();
+  int typesSize = types_.size() - 1;
 
-  if (!isBetween<int>(typeOfConstruction, 0, typesSize - 1)) {
-    typeOfConstruction = Random::getInt(0, typesSize - 1);
+  if (typeOfConstruction == -1 || !isBetween(typeOfConstruction, 0, typesSize)) {
+    typeOfConstruction = Random::getInt(0, typesSize);
   }
 
   std::vector<std::string> type = types_[typeOfConstruction];

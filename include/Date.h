@@ -28,6 +28,7 @@ class Date {
     Date(const Date& date);
 
     // setters
+
     void setDay(int day);
     void setMonth(int month);
     void setYear(int year);
@@ -40,6 +41,7 @@ class Date {
     void setTime(const std::string &time);
 
     // getters
+
     int getDay() const;
     int getMonth() const;
     int getYear() const;
@@ -51,6 +53,7 @@ class Date {
     std::string getDateAndTime() const;
 
     // other
+
     Date &addMonths(int months);
     Date &addYears(int years);
     Date &addDays(int days);
@@ -58,6 +61,13 @@ class Date {
     Date &addMinutes(int minutes);
     Date &addSeconds(int seconds);
 
+    // operators
+
+    friend bool operator<(const Date &lhs, const Date &rhs);
+    friend bool operator>(const Date &lhs, const Date &rhs);
+    friend bool operator==(const Date &lhs, const Date &rhs);
+    
     // output
+
     friend std::ostream& operator<<(std::ostream& out, const Date& date);
 };

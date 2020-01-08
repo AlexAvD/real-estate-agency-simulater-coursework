@@ -1,60 +1,36 @@
-#include <random>
-#include <limits>
+#include <iostream>
 #include <stack>
-#include <iomanip>
-#include <algorithm>
-#include <string>
 
-#include "Random.h"
-#include "Date.h"
-#include "helpers.h"
-
-#include "Person.h"
-
-#include "Seller.h" 
-#include "Buyer.h"
-#include "Realtor.h"
 #include "Agency.h"
-
-#include "RealEstate.h"
+#include "House.h"
 #include "Flat.h"
-
 
 using std::cout;
 using std::endl;
 
+
 int main() {	 
 	setConsoleUTF8();
 
-  /* 
-	Person r = Person::generate();
-	Client c = Client::generate();
-	Seller s = Seller::generate();
+	std::stack<Realtor> realtors;
+	std::stack<RealEstate> realEstates;
 
-	cout << r << '\n'; 
-	cout << c << '\n';
-	cout << s << '\n';  
-	*/
+	// Realtor::getRealtorsFromFile("./data/realtors.txt", &realtors);
+	// RealEstate::getRealEstatesFromFile("./data/realEstates.ext", &realEstates);
 
-	// Person p = Realtor();
+	
+	// cout << realtors;
 
-	/* Flat f;
+	for (int i = 0; i < 5; i++) {
+		if (Random::getInt(0, 100) < 70) {
+			cout << Flat::generate();
+		} else {
+			cout << House::generate();
+		}
 
-	f.setBalcony(true);
-	f.setArea(300);
-
-	Flat f1(f);
-
-	cout << f1; */
-
-	// flat.setRandomProperties();
- 
-	// cout << ss.str(); 
-	// cout << Flat::generate();
-
-
+		cout << "\n\n";
+	}
 
 	return 0;  
 }
 
-    

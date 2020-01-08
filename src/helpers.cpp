@@ -78,8 +78,8 @@ std::string concat(const std::vector<std::string> & strings, char divider) {
   return result;
 }
 
-std::vector<std::string> readFile(const std::string & fileName) {
-	std::ifstream file(fileName);
+std::vector<std::string> readFile(const std::string & pathToFile) {
+	std::ifstream file(pathToFile);
 	std::vector<std::string> result;
 	std::string line;
 
@@ -96,8 +96,8 @@ std::vector<std::string> readFile(const std::string & fileName) {
 }
 
 std::vector<std::map<std::string, std::string>> 
-handleFile(const std::string & fileName, char separator) {
-	std::vector<std::string> lines = readFile(fileName);
+handleFile(const std::string & pathToFile, char separator) {
+	std::vector<std::string> lines = readFile(pathToFile);
 	std::vector<std::map<std::string, std::string>> result;
 	std::map<std::string, std::string> item;
 
@@ -151,16 +151,17 @@ std::ostream& clrl(std::ostream& out) {
 
 
 template <class T>
-void print(const std::vector<T> &v) {
-  for (size_t i = 0, size = v.size(); i < size; i++) {
-    std::cout << v[i] << ", ";
+void print(const std::vector<T> &vector) {
+  for (size_t i = 0, size = vector.size(); i < size; i++) {
+    std::cout << vector[i] << ", ";
   }
 
   std::cout << '\n';
 }
 
-
 template void print<std::string>(const std::vector<std::string> &v);
+
+
 
 /* 
 

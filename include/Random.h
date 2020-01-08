@@ -1,13 +1,7 @@
 #pragma once
 
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
-#include <sstream>
-#include <limits>
 #include <random>
 #include <chrono>
-#include <functional>
 
 class Random {
   private:

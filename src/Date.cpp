@@ -280,6 +280,36 @@ Date &Date::addSeconds(int seconds) {
   return *this;
 }
 
+// operators 
+
+bool operator<(const Date &lhs, const Date &rhs) {
+  int cmp = 
+    (rhs.year_    != lhs.year_)   ? rhs.year_ - lhs.year_ :
+    (rhs.month_   != lhs.month_)  ? rhs.month_ - lhs.month_ :
+    (rhs.day_     != lhs.day_)    ? rhs.day_ - lhs.day_ :
+    (rhs.hour_    != lhs.hour_)   ? rhs.hour_ - lhs.hour_ :
+    (rhs.minute_  != lhs.minute_) ? rhs.minute_ - lhs.minute_ : rhs.second_ - lhs.second_;
+
+  return (cmp > 0) ? true : false;
+}
+
+bool operator>(const Date &lhs, const Date &rhs) {
+  return !(lhs < rhs);
+}
+
+bool operator==(const Date &lhs, const Date &rhs) {
+  return (
+    rhs.year_ == lhs.year_ &&
+    rhs.month_ == lhs.month_ && 
+    rhs.day_ == lhs.day_ &&
+    rhs.hour_ == lhs.hour_ &&
+    rhs.minute_ == lhs.minute_ &&
+    rhs.second_ == lhs.second_ 
+  ) ? true : false;
+}
+
+// output
+
 std::ostream& operator<<(std::ostream &out, const Date &date) {
   out << date.getDateAndTime();
 

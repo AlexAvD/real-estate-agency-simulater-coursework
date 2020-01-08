@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <stack>
 #include "Date.h"
 #include "Person.h"
 
@@ -14,10 +15,11 @@ class RealEstate {
     int rooms_;
     bool furniture_;
     bool repair_;
+    long price_;
     std::string street_;
     std::string district_;
     std::string type_;
-    Person * owner_;
+    Person *owner_;
   
   protected:
     static std::vector<std::vector<std::string>> types_;
@@ -27,6 +29,8 @@ class RealEstate {
     RealEstate();
     RealEstate(const RealEstate &realEstate);
 
+    static void getRealEstatesFromFile(const std::string &pathToFile, std::stack<RealEstate> &dist);
+
     // setters
     void setArea(int area);
     void setBuildYear(int year);
@@ -34,6 +38,7 @@ class RealEstate {
     void setRooms(int rooms);
     void setFurniture(bool furniture);
     void setRepair(bool furniture);
+    void setPrice(long price);
     void setStreet(std::string street);
     void setDistrict(std::string district);
     void setType(std::string type);
@@ -47,6 +52,7 @@ class RealEstate {
     int getRooms() const;
     bool getRepair() const;
     bool getFurniture() const;
+    long getPrice() const;
     std::string getStreet() const;
     std::string getDistrict() const;
     std::string getType() const;

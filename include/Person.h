@@ -14,7 +14,6 @@ class Person {
     static const std::vector<std::vector<std::string>> surnames_;
     static const std::vector<std::vector<std::string>> midnames_;
 
-  protected:
     std::string name_;
     std::string surname_;
     std::string midname_;
@@ -28,6 +27,10 @@ class Person {
     Person();
     Person(const Person & person);
 
+    static std::string getRandomName(int gender = -1);
+    static std::string getRandomSurname(int gender = -1);
+    static std::string getRandomMidname(int gender = -1);
+
      // setters
     void setName(const std::string & name);
     void setSurname(const std::string & surname);
@@ -35,9 +38,13 @@ class Person {
     void setFullName(const std::string & fullName);
     void setPassportData(const std::string & passportData);
     void setGender(bool gender);
+    void setGender(const std::string &gender);
     void setAge(int age);
+    void setAge(const std::string &age);
     void setSalary(int salary);
+    void setSalary(const std::string &salary);
     void setMoney(long money);
+    void setMoney(const std::string &money);
     void setRandomProperties();
 
     // getters
@@ -50,7 +57,7 @@ class Person {
     int getAge() const;
     int getSalary() const;
     long getMoney() const;
-
+    
     // others
   
     virtual std::ostream& print(std::ostream &out) const;

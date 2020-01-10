@@ -15,12 +15,15 @@ bool isBlank(const std::string & str) {
 }
 
 std::vector<std::string> tokenize(const std::string & str, char separator) {
+	
   std::vector<std::string> result;
 
 	for (size_t start = 0, end = 0, len = str.length(); end < len; ++end) {
 		if (str[end] != separator) {
 			if (str[end + 1] == separator || str[end + 1] == '\0') {
-				result.push_back(str.substr(start, end - start + 1));
+				std::string substr = str.substr(start, end - start + 1);
+
+				result.push_back(substr);
 			} else if (str[end - 1] == separator) {
 				start = end;
 			} 
@@ -30,8 +33,8 @@ std::vector<std::string> tokenize(const std::string & str, char separator) {
   return result;
 }
 
-std::string normalizeLine(const std::string & str) {
-  if (str.length() == 0) {
+std::string normalizeLine(const std::string &str) {
+  if (isBlank(str)) {
     return "";
   }
 
@@ -44,6 +47,8 @@ std::string normalizeLine(const std::string & str) {
 			} else if (isspace(str[end - 1])) {
 				start = end;
 			} 
+		} else {
+			++start;
 		}
 	}
 
@@ -90,6 +95,10 @@ std::vector<std::string> readFile(const std::string & pathToFile) {
 
 			result.push_back(line);
 		}
+
+		file.close();
+	} else {
+		std::cerr << colorred << "Не удалось открыть файл \"" << pathToFile << "\"\n";
 	}
 
 	return result;
@@ -102,18 +111,25 @@ handleFile(const std::string & pathToFile, char separator) {
 	std::map<std::string, std::string> item;
 
 	for (const std::string & line : lines) {
-			if (isBlank(line) && item.size() != 0) {
-				result.push_back(item);
-				item.clear();
-			} else {
-				if (line.find(separator) != std::string::npos) {
-					std::vector<std::string> tokenizedLine = tokenize(line, ':');
+		if (isBlank(line) && item.size() != 0) {
+			result.push_back(item);
+			item.clear();
+		} else {
+			if (line.find(separator) != std::string::npos) {
+				std::vector<std::string> tokenizedLine = tokenize(line, ':');
+
+				if (tokenizedLine.size() >= 2) {
 					std::string key = normalizeLine(tokenizedLine[0]);
 					std::string val = normalizeLine(tokenizedLine[1]);
 
 					item[key] = val; 
 				}
 			}
+		}
+	}
+
+	if (item.size()) {
+		result.push_back(item);
 	}
 
 	return result;
@@ -147,6 +163,24 @@ std::ostream& clrll(std::ostream& out) {
 std::ostream& clrl(std::ostream& out) {
     out << "\r\x1b[0K";
     return out;
+}
+
+std::ostream& colorred(std::ostream& out) {
+	out << "\033[1;31m";
+
+	return out;
+}
+
+std::ostream& endcolor(std::ostream& out) {
+	out << "\033[0m";
+
+	return out;
+}
+
+std::ostream& li(std::ostream& out) {
+	out << "  • ";
+
+	return out;
 }
 
 
@@ -204,4 +238,12 @@ void wait(int ms) {
 
 int roundTo(int num, int digit) {
   return (num % digit) ? (num + digit * getSign(num) - (num % digit)) : num;
+}
+
+bool isTrueWord(const std::string &str) {
+	return (std::find(TRUE_WORDS.begin(), TRUE_WORDS.end(), str) != TRUE_WORDS.end());
+}
+
+bool isFalseWord(const std::string &str) {
+	return (std::find(FALSE_WORDS.begin(), FALSE_WORDS.end(), str) != FALSE_WORDS.end());
 }

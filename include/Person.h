@@ -20,8 +20,6 @@ class Person {
     std::string passportData_;
     bool gender_;
     int age_;
-    int salary_;
-    long money_;
 
   public:
     Person();
@@ -40,12 +38,9 @@ class Person {
     void setGender(bool gender);
     void setGender(const std::string &gender);
     void setAge(int age);
-    void setAge(const std::string &age);
-    void setSalary(int salary);
-    void setSalary(const std::string &salary);
-    void setMoney(long money);
-    void setMoney(const std::string &money);
     void setRandomProperties();
+    virtual std::map<std::string, std::string> 
+      setProperties(const std::map<std::string, std::string> &proprerties);
 
     // getters
     std::string getName() const;
@@ -55,9 +50,7 @@ class Person {
     std::string getPassportData() const;
     bool getGender() const;
     int getAge() const;
-    int getSalary() const;
-    long getMoney() const;
-    
+
     // others
   
     virtual std::ostream& print(std::ostream &out) const;

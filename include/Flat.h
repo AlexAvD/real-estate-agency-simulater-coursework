@@ -19,6 +19,7 @@ class Flat : public RealEstate {
     Flat(const Flat &flat);
 
     static Flat generate();
+    static void getFlatsFromFile(const std::string &pathToFile, std::stack<Flat> *dist);
    
     // settesr
 
@@ -28,14 +29,16 @@ class Flat : public RealEstate {
     void setLift(bool lift);
     void setLayout(std::string layout);
     void setRandomProperties();
+    virtual std::map<std::string, std::string> 
+      setProperties(const std::map<std::string, std::string> &proprerties) override;
 
     // getters
 
-    int getFloor() const;
-    bool getNewBuilding() const;
-    bool getBalcony() const;
-    bool getLift() const;
-    std::string getLayout() const;
+    virtual int getFloor() const override;
+    virtual bool getNewBuilding() const override;
+    virtual bool getBalcony() const override;
+    virtual bool getLift() const override;
+    virtual std::string getLayout() const override;
 
     // others
     

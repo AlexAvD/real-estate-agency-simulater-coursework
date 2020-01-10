@@ -1,38 +1,27 @@
 #include "Report.h"
 
 Report::Report() {
-  seller_ = nullptr;
   buyer_ = nullptr;
+  realEstate_ = nullptr;
+  date_ = Date("0.0.0");
+  revenue_ = 0;
 }
 
 // setters
 
-void Report::setSeller(Seller *seller) {
-  seller_ = seller;
-}
-
-void Report::setBuyer(Buyer *buyer) { 
+Report::Report(
+  const Date &date, 
+  RealEstate *realEstate, Client *buyer, long revenue
+) {
+  date_ = date;
+  realEstate_ = realEstate;
   buyer_ = buyer;
-} 
-
-// getters
-
-Seller Report::getSeller() const {  
-  return *seller_;
+  revenue_ = revenue;
 }
 
-Buyer Report::getBuyer() const {
-  return *buyer_;
-}
-  
-std::vector<std::pair<Date, std::string>> Report::getHistory() const {
-  return history_;
-}
- 
-// others
-
-void Report::addToHistory(const Date &date, const std::string &action) {
-  std::pair<Date, std::string> historyItem({date, action}); 
-  
-  history_.push_back(historyItem); 
+Report::Report(const Report &report) {
+  date_ = report.date_;
+  realEstate_ = report.realEstate_;
+  buyer_ = report.buyer_;
+  revenue_ = report.revenue_;
 }

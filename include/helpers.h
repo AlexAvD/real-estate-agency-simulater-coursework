@@ -12,6 +12,17 @@
 #include <thread>
 #include "Random.h"
 
+const std::vector<std::string> TRUE_WORDS = {
+  "1", "Да", "да", "ДА",
+  "Есть", "есть", "ЕСТЬ",
+  "True", "true", "TRUE"
+};
+
+const std::vector<std::string> FALSE_WORDS =  {
+  "0", "Нет", "нет", "НЕТ",
+  "False", "false", "FALSE"
+};
+
 /* функция устанавливает кодировку консоли на utf-8 */
 void setConsoleUTF8();
 
@@ -89,6 +100,16 @@ std::ostream& clrll(std::ostream& out);
 /* манипулятор очищающий текущую строку */
 std::ostream& clrl(std::ostream& out);
 
+/* манипулятор делающий текс вывода карсным */
+std::ostream& colorred(std::ostream& out);
+
+/* манипулятор границы вывода цветного текста */
+std::ostream& endcolor(std::ostream& out);
+
+/* манипулятор создающий элемент списка, добаляя в вывод "  • "  */
+std::ostream& li(std::ostream& out);
+
+
 /* функция замараживает текущий поток на время "ms" */
 void wait(int ms);
 
@@ -112,3 +133,9 @@ template <class T>
 bool isBetween(T num, T min, T max) {
   return (num >= min) && (num <= max);
 }
+
+/* проверяет является ли строка "str" положительным словом из вектора "TRUE_WORDS" */
+bool isTrueWord(const std::string &str);
+
+/* проверяет является ли строка "str" отрицательным словом из вектора "FALSE_WORDS" */
+bool isFalseWord(const std::string &str);

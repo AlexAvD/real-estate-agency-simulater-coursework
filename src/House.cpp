@@ -1,6 +1,6 @@
 #include "House.h"
 
-const std::vector<std::string> House::wallMaterials_ = {
+const std::vector<std::string> House::materials_ = {
   "Монолитный кирпич",
   "Дерево",
   "Кирпич",
@@ -12,13 +12,13 @@ const std::vector<std::string> House::wallMaterials_ = {
 House::House() : RealEstate() {
   plotArea_ = 0;
   garage_ = false;
-  wallMaterial_ = "";
+  material_ = "";
 }
 
 House::House(const House &house) : RealEstate(house) {
-  plotArea_ = 0;
-  garage_ = false;
-  wallMaterial_ = "";
+  plotArea_ = house.plotArea_;
+  garage_ = house.garage_;
+  material_ = house.material_;
 }
 
 House House::generate() {
@@ -29,14 +29,40 @@ House House::generate() {
   return house;
 }
 
+void House::getHousesFromFile(const std::string &pathToFile, std::stack<House> *dist) {	
+	std::vector<std::map<std::string, std::string>> data = handleFile(pathToFile, ':');
+	std::map<std::string, std::string> remainingProperties;
+	
+	for (auto &dataItem : data) {
+		if (dataItem.find("Тип") != dataItem.end()) {
+			if (RealEstate::isHouse(dataItem["Тип"])) {
+				House house;
+	
+				remainingProperties = house.setProperties(dataItem);
+
+				dist->push(house);
+
+        if (remainingProperties.size()) {
+          for (const auto &[key, val] : remainingProperties) {
+            std::cerr << colorred << "Поля \"" << key << "\" в объекте \"House\" не существует\n" << endcolor;
+          }
+			  }	
+			}
+
+		} else {
+      std::cerr << colorred << "Не найдено ключевое поле \"Тип\"\n" << endcolor;
+    }
+	}
+}
+
 // setters
 
 void House::setGarage(bool garage) {
   garage_ = garage;
 }
 
-void House::setWallMaterial(const std::string &wallMaterial) {
-  wallMaterial_ = wallMaterial;
+void House::setMaterial(const std::string &material) {
+  material_ = material;
 }
 
 void House::setPlotArea(int plotArea) {
@@ -46,10 +72,30 @@ void House::setPlotArea(int plotArea) {
 void House::setRandomProperties() {
   House::RealEstate::setRandomProperties(1);
 
-  wallMaterial_ = wallMaterials_[Random::getInt(0, wallMaterials_.size() - 1)];
+  material_ = materials_[Random::getInt(0, materials_.size() - 1)];
   garage_ = Random::getBool();
   plotArea_ = Random::getInt(100, 500);
 }
+
+std::map<std::string, std::string> 
+House::setProperties(const std::map<std::string, std::string> &proprerties) {
+  std::map<std::string, std::string> remainingProperties;
+
+  for (const auto &[key, val] : (House::RealEstate::setProperties(proprerties))) {
+    if (key == "Материал") {
+      setMaterial(val);
+    } else if (key == "Площадь участка") {
+      setPlotArea(std::stoi(val));
+    } else if (key == "Гараж") {
+      setGarage(isTrueWord(val));
+    } else {
+      remainingProperties[key] = val;
+    }
+  }
+
+  return remainingProperties;
+}
+
 
 // getters
 
@@ -61,18 +107,29 @@ bool House::getGarage() const {
   return garage_;
 }
 
-std::string House::getWallMaterial() const {
-  return wallMaterial_;
+std::string House::getMaterial() const {
+  return material_;
 }
 
 // others
 
 std::ostream &House::print(std::ostream &out) const {
+  int saleType = getSaleType();
+ 
   House::RealEstate::print(out);
+
   out 
-    << "Материал стен: " << wallMaterial_ << "\n"
+    << "Материал: " << material_ << "\n"
     << "Площадь участка: " << plotArea_ << " м^2\n" 
     << "Гараж: " << ((garage_) ? "Есть" : "Нет") << "\n";
+
+  if (saleType != -1) {
+    std::string saleTypeStr = (saleType == 0) ? "Продажа" : ( (saleType == 1) ? "Аренда" : "" );
+
+    out << "Тип продажи: " << saleTypeStr << '\n';
+  }
+    
+  out << "Цена: " << getPrice() << " руб." << '\n';
 
   return out;
 }

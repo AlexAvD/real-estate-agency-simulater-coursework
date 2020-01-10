@@ -29,6 +29,31 @@ Flat Flat::generate() {
   return flat;
 }
 
+void Flat::getFlatsFromFile(const std::string &pathToFile, std::stack<Flat> *dist) {	
+	std::vector<std::map<std::string, std::string>> data = handleFile(pathToFile, ':');
+	std::map<std::string, std::string> remainingProperties;
+	
+	for (auto &dataItem : data) {
+		if (dataItem.find("Тип") != dataItem.end()) {
+			if (RealEstate::isFlat(dataItem["Тип"])) {
+				Flat flat;
+	
+				remainingProperties = flat.setProperties(dataItem);
+
+				dist->push(flat);
+
+        if (remainingProperties.size()) {
+          for (const auto &[key, val] : remainingProperties) {
+            std::cerr << colorred << "Поля \"" << key << "\" в объекте \"Flat\" не существует\n" << endcolor;
+          }
+        }	
+			} 			
+		} else {
+      std::cerr << colorred << "Не найдено ключевое поле \"Тип\"\n" << endcolor;
+    }
+	}
+}
+
 // setters
 void Flat::setFloor(int floor) {
   floor_ = floor;
@@ -48,6 +73,29 @@ void Flat::setLift(bool lift) {
 
 void Flat::setLayout(std::string layout) {
   layout_ = layout;
+}
+
+std::map<std::string, std::string> 
+Flat::setProperties(const std::map<std::string, std::string> &proprerties) {
+  std::map<std::string, std::string> remainingProperties;
+
+  for (const auto &[key, val] : Flat::RealEstate::setProperties(proprerties)) {
+    if (key == "Этаж") {
+      setFloor(std::stoi(val));
+    } else if (key == "Новостройка") {
+      setNewBuilding(isTrueWord(val));
+    } else if (key == "Балкон") {
+      setBalcony(isTrueWord(val));
+    } else if (key == "Лифт") {
+      setLift(isTrueWord(val));
+    } else if (key == "Планировка") { 
+      setLayout(val);
+    } else {
+      remainingProperties[key] = val;
+    }
+  }
+
+  return remainingProperties;
 }
 
 // getters
@@ -81,7 +129,7 @@ void Flat::setRandomProperties() {
   int buildYear = getBuildYear();
   setNewBuilding(isBetween(buildYear, 2016, 2019) ? true : false);
 
-  int lift = (floors <= 5) ? Random::getBool() : true;
+  int lift = (floors <= 10) ? Random::getBool() : true;
   setLift(lift);
 
   setBalcony(Random::getBool());
@@ -89,10 +137,24 @@ void Flat::setRandomProperties() {
 }
 
 std::ostream &Flat::print(std::ostream &out) const {
-  return Flat::RealEstate::print(out) 
+  int saleType = getSaleType();
+
+  Flat::RealEstate::print(out);
+
+  out 
     << "Этаж: " << floor_ << '\n'
-    << "Новостройка: " << (floor_ ? "Да" : "Нет")  << '\n'
+    << "Новостройка: " << (newBuilding_ ? "Да" : "Нет")  << '\n'
     << "Балкон: " << (balcony_ ? "Есть" : "Нет") << '\n'
     << "Лифт: " << (lift_ ? "Есть" : "Нет") << '\n'  
     << "Планировка: " << layout_ << '\n';
+
+  if (saleType != -1) {
+    std::string saleTypeStr = (saleType == 0) ? "Продажа" : ( (saleType == 1) ? "Аренда" : "" );
+
+    out << "Тип продажи: " << saleTypeStr << '\n';
+  }
+    
+  out << "Цена: " << getPrice() << " руб." << '\n';
+
+  return out;
 }

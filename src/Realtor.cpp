@@ -3,12 +3,10 @@
 Realtor::Realtor() : Person() {
   experience_ = 0;
   charisma_ = 0.5;
-  currentReport_ = nullptr;
-  currentBuyer_ = nullptr;
-  currentSeller_ = nullptr;
+  buyer_ = nullptr;
+  realEstate_ = nullptr;
   agency_ = nullptr;
-
-
+  date_ = Date();
 }
 
 Realtor::Realtor(Agency *agency) : Realtor() {
@@ -18,10 +16,11 @@ Realtor::Realtor(Agency *agency) : Realtor() {
 Realtor::Realtor(const Realtor &realtor) : Person(realtor) {  
   experience_ = realtor.experience_;
   charisma_ = realtor.charisma_;
-  currentReport_ = realtor.currentReport_;
-  currentBuyer_ = realtor.currentBuyer_;
-  currentSeller_ = realtor.currentSeller_;
+  date_ = realtor.date_;
+  reports_ = realtor.reports_;
+  buyer_ = realtor.buyer_;
   agency_ = realtor.agency_;
+  realEstate_ = realtor.realEstate_;
 }
 
 Realtor Realtor::generate() {
@@ -34,37 +33,20 @@ Realtor Realtor::generate() {
 
 void Realtor::getRealtorsFromFile(const std::string &pathToFile, std::stack<Realtor> *dist) {
 	std::vector<std::map<std::string, std::string>> data = handleFile(pathToFile, ':');
+	std::map<std::string, std::string> remainingProperties;
 	
-	Realtor tmp;
+	for (auto &dataItem : data) {
+    Realtor realtor;
 
-	for (auto &vItem : data) {
-		for (const auto &[key, val] : vItem) {
-			if (key == "Имя") {
-				tmp.setName(val);
-			} else if (key == "Фамилия") {
-				tmp.setSurname(val);
-			} else	if (key == "Фамилия") {
-				tmp.setSurname(val);
-			} else if (key == "ФИО") {
-				tmp.setFullName(val);
-			} else if (key == "Пол") {
-				tmp.setGender(val);
-			} else if (key == "Возраст") {
-				tmp.setAge(val);
-			} else if (key == "Паспортные данные") {
-				tmp.setPassportData(val);
-			} else if (key == "Зарплата") {
-				tmp.setSalary(val);
-			} else if (key == "Деньги") {
-				tmp.setMoney(val);
-			} else if (key == "Опыт") {
-				tmp.setExperience(val);
-			} else if (key == "Харизма") {
-				tmp.setCharisma(val);
-			}
-		}
+    remainingProperties = realtor.setProperties(dataItem);
 
-		dist->push(tmp);
+    if (remainingProperties.size()) {
+      for (const auto &[key, val] : remainingProperties) {
+        std::cerr << colorred << "Поля \"" << key << "\" не существует\n" << endcolor;
+		  }
+    }
+
+		dist->push(realtor);
 	}
 }
 
@@ -74,35 +56,51 @@ void Realtor::setExperience(int experience) {
   experience_ = experience;
 }
 
-void Realtor::setExperience(const std::string &experience) {
-  experience_ = std::stoi(experience);
-}
-
 void Realtor::setCharisma(float charisma) {
   charisma_ = charisma;
-}
-
-void Realtor::setCharisma(const std::string &charisma) {
-  charisma_ = std::stof(charisma);
 }
 
 void Realtor::setDate(const Date &date) {
   date_ = date;
 }
 
-void Realtor::setCurrentReport(const Report &report) {
-  reports_.push_back(report);
 
-  currentReport_ = &reports_.back();
+void Realtor::setAgency(Agency *agency) {
+  agency_ = agency;
 }
 
-void Realtor::setCurrentBuyer(Buyer *buyer) {
-  currentBuyer_ = buyer;
+void Realtor::setRealEstate(RealEstate *realEstate) {
+  realEstate_ = realEstate;
 }
 
-void Realtor::setCurrentSeller(Seller *seller) {
-  currentSeller_ = seller;
+void Realtor::setBuyer(Client *buyer) {
+  buyer_ = buyer;
 }
+
+std::map<std::string, std::string> 
+Realtor::setProperties(const std::map<std::string, std::string> &proprerties) {
+  std::map<std::string, std::string> remainingProperties;
+
+  for (const auto &[key, val] : Realtor::Person::setProperties(proprerties)) {
+    if (key == "Опыт") {
+      setExperience(std::stoi(val));
+    } else if (key == "Харизма") {
+      setCharisma(std::stof(val));
+    } else {
+      remainingProperties[key] = val;
+    }
+  }
+
+  return remainingProperties;
+}
+
+void Realtor::setRandomProperties() {
+  Realtor::Person::setRandomProperties();
+
+  setExperience(Random::getInt(0, (getAge() - 25)));
+  setCharisma(Random::getInt(20 + getExperience() * 2, 90) / 100.);
+}
+
 
 // getters
 
@@ -118,140 +116,68 @@ Date Realtor::getDate() const {
   return date_;
 }
 
-Buyer *Realtor::getCurrentBuyer() const {
-  return currentBuyer_;
+RealEstate *Realtor::getRealEstate() const {
+  return realEstate_;
 }
 
-Seller *Realtor::getCurrentSeller() const {
-  return currentSeller_;
+Client *Realtor::getBuyer() const {
+  return buyer_;
 }
 
-void Realtor::setRandomProperties() {
-  Realtor::Person::setRandomProperties();
-
-  setExperience(Random::getInt(0, (getAge() - 25)));
-  setCharisma(Random::getInt(20 + getExperience() * 2, 90) / 100.);
+std::vector<Report> Realtor::getReports() const {
+  return reports_;
 }
 
-
-void Realtor::searchClient() {
-  Buyer *buyer;
-  Seller *seller;
-
-  if (!currentClient_) {
-    std::cout << "[" << date_ << "]: " << "Поиск клиентов...";
-   
-    buyer = searchBuyer();
-
-    if (buyer) {
-      currentClient_ = buyer;
-      currentBuyer_ = buyer;
-    } else {
-      seller = searchSeller();
-
-      if (seller) {
-        currentClient_ = seller;
-        currentSeller_ = seller;
-      }
-    }
-  } else {
-    int currentClientType = currentBuyer_->getType();
-
-    if (!currentBuyer_) {
-      std::cout << "[" << date_ << "]: " << "Поиск "
-        << ((currentClientType == 0) ? "покупателя" : "арендодателя") << "...";
-
-      buyer = searchBuyer();
-
-      if (buyer) {
-        currentBuyer_ = buyer;
-      }
-    } else if (!currentSeller_) {
-      
-      std::cout << "[" << date_ << "]: " << "Поиск "
-        << ((currentClientType == 2) ? "продовца" : "арендатора") << "...";
-
-      seller = searchSeller();
-
-      if (seller) {
-        currentSeller_ = seller;
-      }
-    } else {
-
-    }
-  }
-}
-
-
-
-Buyer* Realtor::searchBuyer() {
-  int chanceToFind = asymp(experience_, 10, 40, 2);
-
-  if (chance(chanceToFind)) {
-    Buyer buyer = Buyer::generate();
-
-    date_.setMinute(Random::getInt(10, 59));
-
-    std::cout << "[" << date_ << "]: " << "Найден " << buyer.getTypeAsString() << '\n';
-
-    agency_->addBuyer(buyer);
-
-    return agency_->getLastAddedBuyer();
-  }
-
-  return nullptr;
-}
-
-Seller *Realtor::searchSeller() {
-  if (!currentSeller_) {
-    int percent = asymp(experience_, 20, 60, 2);
-
-    if (chance(percent)) {
-      Seller seller = Seller::generate();
-
-      date_.setMinute(Random::getInt(10, 59));
-
-      std::cout << "[" << date_ << "]: " << "Найден " << seller.getTypeAsString() << '\n';
-
-      agency_->addSeller(seller);
-      currentSeller_ = agency_->getLastAddedSeller();
-    }
-  }
-
-  return nullptr;
-}
 
 // others
 
-void Realtor::addToReport(const Date &date, const std::string &action) {
-  if (currentReport_) {
-    currentReport_->addToHistory(date, action);
-  }
+void Realtor::addReport(
+  const Date &date, RealEstate *realEstate, Client *buyer, long revenue
+){
+  reports_.push_back(Report(date, realEstate, buyer, revenue));
 }
  
 
-void Realtor::concludeContract() {
-  
-}
-
 void Realtor::work() {
-  searchSeller();
-  concludeContract();
-  
+  if (!buyer_) {
+    int chanceToFind = asymp(experience_, 1, 5, 2);
 
-  /* if (!currentSeller_) {
-    Seller *seller = searchSeller();
-    
-    if (seller) {
-      currentSeller_ = seller;
+    if (chance(chanceToFind)) {
+      Client *buyer = agency_->addBuyer(Client::generate());
 
+      buyer_ = buyer;
 
+      int days = 30 - asymp(charisma_, experience_, 30, 0.5) 
+      + ((realEstate_->getSaleType() == 0) ? 5 : 0);
+
+      date_.addDays(days);
     }
+
+  } else {
+    long revenue;
+    long price = realEstate_->getPrice();
+    int saleType = realEstate_->getSaleType();
+    
+    if (saleType == 0) {
+      revenue = price * agency_->getSaleCommision();
+    } else if (saleType == 1) {
+      revenue = price * agency_->getRentCommision();
+    }
+
+    buyer_->setRealEstate(realEstate_);
+    realEstate_->setOwner(buyer_);
+    agency_->addSoldRealEstate(realEstate_);
+    agency_->addRevenue(revenue);
+
+    date_.setMinute(Random::getInt(0, 59));
+
+    // std::cout << Report(date_, realEstate_, buyer_, revenue) << '\n';
+
+    addReport(date_, realEstate_, buyer_, revenue);
+
+    buyer_ = nullptr;
+    realEstate_ = nullptr;
   }
-
-  if (!seller) {
-
-  } */
 }
 
 std::ostream& Realtor::print(std::ostream &out) const {

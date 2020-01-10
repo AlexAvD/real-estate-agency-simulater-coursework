@@ -293,6 +293,15 @@ bool operator<(const Date &lhs, const Date &rhs) {
   return (cmp > 0) ? true : false;
 }
 
+bool operator<=(const Date &lhs, const Date &rhs) {
+  return (lhs < rhs || lhs == rhs) ? true : false;
+}
+
+bool operator>=(const Date &lhs, const Date &rhs) {
+  return !(lhs <= rhs);
+}
+
+
 bool operator>(const Date &lhs, const Date &rhs) {
   return !(lhs < rhs);
 }

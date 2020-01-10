@@ -7,29 +7,26 @@
 #include "RealEstate.h"
 
 class Client : public Person {
-  private:
-    // тип клиента: 
-    // 0 - продавец, 1 - арендодатель, 
-    // 2 - покупатель, 3 - арендатор
-    int type_; 
+  private: 
     RealEstate *realEstate_;
-
-  protected: 
-    static const std::vector<std::string> types_;
 
   public:
     Client();
     Client(const Client &client);
 
+    static Client generate();
+
     // setters
-    void setType(int type = -1);
+
     void setRealEstate(RealEstate *realEstate);
     void setRandomProperties();
 
     // getters
-    int getType() const;
-    std::string getTypeAsString() const;
     RealEstate *getRealEstate() const;
+
+    // others
+
+    
 
     virtual std::ostream &print(std::ostream &out) const override;
 };

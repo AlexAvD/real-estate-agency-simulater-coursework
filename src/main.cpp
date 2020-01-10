@@ -8,28 +8,42 @@
 using std::cout;
 using std::endl;
 
+const std::string pathToRealtors 	= "./data/realtors.txt";
+const std::string pathToFlats 		= "./data/flats.txt";
+const std::string pathToHouses 		= "./data/houses.txt";
+const std::string pathToReport 		= "./data/report.txt";
 
 int main() {	 
 	setConsoleUTF8();
 
 	std::stack<Realtor> realtors;
-	std::stack<RealEstate> realEstates;
+	std::stack<Flat> flats;
+	std::stack<House> houses;
 
-	// Realtor::getRealtorsFromFile("./data/realtors.txt", &realtors);
-	// RealEstate::getRealEstatesFromFile("./data/realEstates.ext", &realEstates);
+	Realtor::getRealtorsFromFile(pathToRealtors, &realtors);
+	Flat::getFlatsFromFile(pathToFlats, &flats);
+	House::getHousesFromFile(pathToHouses, &houses);
+ 
+	Agency agency;
+
+	agency.setRealtors(&realtors);
+	agency.setFlats(&flats);
+	agency.setHouses(&houses);
+  
+	agency.simulate();
+	agency.writeReport(pathToReport);
+/* 
+	cout << agency.getFlatsForSale()->size() << '\n';
+	cout << agency.getHousesForSale()->size() << '\n';
+	cout << agency.getSoldRealEstates()->size() << '\n';
+	cout << agency.getRevenue() << '\n';  */
 
 	
-	// cout << realtors;
+	
+	// cout << *agency.getHouses(); 
+ 
+ 	
 
-	for (int i = 0; i < 5; i++) {
-		if (Random::getInt(0, 100) < 70) {
-			cout << Flat::generate();
-		} else {
-			cout << House::generate();
-		}
-
-		cout << "\n\n";
-	}
 
 	return 0;  
 }

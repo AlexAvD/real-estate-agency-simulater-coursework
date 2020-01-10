@@ -48,8 +48,6 @@ Person::Person() {
   gender_ = 0;
   passportData_ = "";
   age_ = 0;
-  salary_ = 0;
-  money_ = 0;
 }
 
 Person::Person(const Person & person) {
@@ -59,38 +57,52 @@ Person::Person(const Person & person) {
   passportData_ = person.passportData_;
   gender_ = person.gender_;
   age_ = person.age_;
-  salary_ = person.salary_;
-  money_ = person.money_;
 }
 
 std::string Person::getRandomName(int gender) {
-  if (gender == -1) {
-    gender = Random::getInt(0, 1);
-  } else {
-    gender %= 2;
-  }
+  gender = (gender == -1) ? Random::getInt(0, 1) : gender % 2;
 
-  return names_[gender][Random::getInt(0, names_.size() - 1)];
+
+  return names_[gender][Random::getInt(0, names_[gender].size() - 1)];;
 }
 
 std::string Person::getRandomSurname(int gender) {
-  if (gender == -1) {
-    gender = Random::getInt(0, 1);
-  } else {
-    gender %= 2;
-  }
+  gender = (gender == -1) ? Random::getInt(0, 1) : gender % 2;
 
-  return surnames_[gender][Random::getInt(0, surnames_.size() - 1)];
+  return surnames_[gender][Random::getInt(0, surnames_[gender].size() - 1)];
 }
 
 std::string Person::getRandomMidname(int gender) {
-  if (gender == -1) {
-    gender = Random::getInt(0, 1);
-  } else {
-    gender %= 2;
+  gender = (gender == -1) ? Random::getInt(0, 1) : gender % 2;
+
+  return midnames_[gender][Random::getInt(0, midnames_[gender].size() - 1)];
+}
+
+std::map<std::string, std::string> 
+Person::setProperties(const std::map<std::string, std::string> &proprerties) {
+  std::map<std::string, std::string> remainingProperties;
+
+  for (const auto &[key, val] : proprerties) {
+    if (key == "Имя") {
+      setName(val);
+    } else if (key == "Фамилия") {
+      setSurname(val);
+    } else	if (key == "Отчество") {
+      setMidname(val);
+    } else if (key == "ФИО") {
+      setFullName(val);
+    } else if (key == "Пол") {
+      setGender(val);
+    } else if (key == "Возраст") {
+      setAge(std::stoi(val));
+    } else if (key == "Паспортные данные") {
+      setPassportData(val);
+    } else {
+      remainingProperties[key] = val;
+    }
   }
 
-  return midnames_[gender][Random::getInt(0, midnames_.size() - 1)];
+  return remainingProperties;
 }
 
 // setters
@@ -122,7 +134,7 @@ void Person::setGender(bool gender) {
 void Person::setGender(const std::string &gender) {
   if (gender.find("м") != std::string::npos || gender.find("М") != std::string::npos) {
     gender_ = 1;
-  } else if (gender.find("ж") != std::string::npos || gender.find("Ж") != std::string::npos) {
+  } else {
     gender_ = 0;
   }
 }
@@ -135,35 +147,15 @@ void Person::setAge(int age) {
   age_ = age;
 }
 
-void Person::setAge(const std::string &age) {
-  age_ = std::stoi(age);
-}
-
-void Person::setSalary(int salary) {
-  salary_ = salary;
-}
-
-void Person::setSalary(const std::string &salary) {
-  salary_ = std::stoi(salary);
-}
-
-void Person::setMoney(long money) {
-  money_ = money;
-}
-
-void Person::setMoney(const std::string &money) {
-  money_ = std::stol(money);
-}
-
 
 void Person::setRandomProperties() {
-  setGender(Random::getBool());
-  setName(getRandomName());
-  setSurname(getRandomSurname());
-  setMidname(getRandomMidname());
+  bool gender = Random::getBool();
+  
+  setGender(gender);
+  setName(getRandomName(getGender()));
+  setSurname(getRandomSurname(gender));
+  setMidname(getRandomMidname(gender));
   setAge(Random::getInt(25, 60));
-  setSalary(Random::getInt(20, 150) * 1000);
-  setMoney(Random::getInt(50000, 200000));
 
   std::stringstream ss;
 
@@ -207,14 +199,6 @@ std::string Person::getPassportData() const {
 int Person::getAge() const {
   return age_;
 }
- 
-int Person::getSalary() const {
-  return salary_;
-}
-
-long Person::getMoney() const {
-  return money_;
-}
 
 
 
@@ -228,9 +212,7 @@ std::ostream& Person::print(std::ostream &out) const {
   out << "ФИО: " << getFullName() << '\n'
       << "Пол: " << (gender_ ? "муж." : "жен.") << '\n'
       << "Возраст: " << age_ << '\n'
-      << "Паспортные данные: " << passportData_ << '\n'
-      << "Зарплата: " << salary_ << " руб." << '\n'
-      << "Деньги: " << money_ << " руб." << '\n';
+      << "Паспортные данные: " << passportData_ << '\n';
 
   return out;
 }

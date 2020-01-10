@@ -64,7 +64,9 @@ class Date {
     // operators
 
     friend bool operator<(const Date &lhs, const Date &rhs);
+    friend bool operator<=(const Date &lhs, const Date &rhs);
     friend bool operator>(const Date &lhs, const Date &rhs);
+    friend bool operator>=(const Date &lhs, const Date &rhs);
     friend bool operator==(const Date &lhs, const Date &rhs);
     
     // output

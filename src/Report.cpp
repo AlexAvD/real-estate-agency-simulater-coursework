@@ -25,3 +25,11 @@ Report::Report(const Report &report) {
   buyer_ = report.buyer_;
   revenue_ = report.revenue_;
 }
+
+long Report::getRevenue() const {
+  return revenue_;
+}
+
+RealEstate *Report::getRealEstate() const {
+  return realEstate_;
+}

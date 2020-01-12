@@ -6,7 +6,11 @@ Client::Client() : Person() {
 }
 
 Client::Client(const Client &client) : Person(client) {
-  realEstate_ = nullptr;
+  realEstate_ = client.realEstate_;
+}
+
+Client::~Client() {
+
 }
 
 Client Client::generate() {
@@ -37,6 +41,10 @@ RealEstate *Client::getRealEstate() const {
 
 std::ostream &Client::print(std::ostream &out) const {
   Person::print(out);
+
+  if (realEstate_) {
+    out << realEstate_->getType() << ": " << realEstate_->getStreet() << "\n";
+  }
 
   return out;
 }

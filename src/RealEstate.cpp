@@ -56,7 +56,6 @@ RealEstate::RealEstate() {
   price_ = 0;
   furniture_ = false;
   repair_ = false;
-  owner_ = nullptr;
 }
 
 RealEstate::RealEstate(const RealEstate & realEstate) {
@@ -71,7 +70,10 @@ RealEstate::RealEstate(const RealEstate & realEstate) {
   furniture_  = realEstate.furniture_;
   repair_     = realEstate.repair_;
   saleType_   = realEstate.saleType_;
-  owner_      = realEstate.owner_;
+}
+
+RealEstate::~RealEstate() {
+
 }
 
 bool RealEstate::isFlat(const std::string &typeOfRealEstate) {
@@ -139,11 +141,6 @@ void RealEstate::setDistrict(const std::string &district) {
 void RealEstate::setType(const std::string &type) {
   type_ = type;
 }
-
-void RealEstate::setOwner(Person *person) {
-  owner_ = person;
-}
-
 
 void RealEstate::setRandomProperties(int typeOfConstruction) {
   int typesSize = types_.size() - 1;
@@ -282,13 +279,31 @@ std::string RealEstate::getType() const {
   return type_;
 }
 
+// operators
+
+RealEstate &RealEstate::operator=(const RealEstate &realEstate) {
+  street_     = realEstate.street_;
+  district_   = realEstate.district_;
+  type_       = realEstate.type_;
+  area_       = realEstate.area_;
+  buildYear_  = realEstate.buildYear_;
+  floors_     = realEstate.floors_;
+  rooms_      = realEstate.rooms_;
+  price_      = realEstate.price_;
+  furniture_  = realEstate.furniture_;
+  repair_     = realEstate.repair_;
+  saleType_   = realEstate.saleType_;
+
+  return *this;
+}
+
+// others
 
 std::ostream &RealEstate::print(std::ostream &out) const {
   out
     << "Тип: "            << type_ << '\n'
     << "Район: "          << district_ << '\n'
     << "Улица: "          << street_ << '\n'
-    << "Владелец: "       << ((owner_ == nullptr) ? "" : owner_->getFullName()) << '\n'
     << "Год постройки: "  << buildYear_ << '\n'
     << "Площадь: "        << area_ << " м^2" << '\n'
     << "Кол-во комнат: "  << rooms_ << '\n'

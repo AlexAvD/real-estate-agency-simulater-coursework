@@ -29,9 +29,9 @@ class House : public RealEstate {
 
     // getters
     
-    int getPlotArea() const;
-    bool getGarage() const; 
-    std::string getMaterial() const;
+    virtual int getPlotArea() const override;
+    virtual bool getGarage() const override; 
+    virtual std::string getMaterial() const override;
 
     // others
 

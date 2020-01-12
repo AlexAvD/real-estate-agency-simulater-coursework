@@ -59,22 +59,20 @@ Person::Person(const Person & person) {
   age_ = person.age_;
 }
 
-std::string Person::getRandomName(int gender) {
-  gender = (gender == -1) ? Random::getInt(0, 1) : gender % 2;
+Person::~Person() {
+  
+}
 
 
+std::string Person::getRandomName(bool gender) {
   return names_[gender][Random::getInt(0, names_[gender].size() - 1)];;
 }
 
-std::string Person::getRandomSurname(int gender) {
-  gender = (gender == -1) ? Random::getInt(0, 1) : gender % 2;
-
+std::string Person::getRandomSurname(bool gender) {
   return surnames_[gender][Random::getInt(0, surnames_[gender].size() - 1)];
 }
 
-std::string Person::getRandomMidname(int gender) {
-  gender = (gender == -1) ? Random::getInt(0, 1) : gender % 2;
-
+std::string Person::getRandomMidname(bool gender) {
   return midnames_[gender][Random::getInt(0, midnames_[gender].size() - 1)];
 }
 
@@ -132,14 +130,17 @@ void Person::setGender(bool gender) {
 }
 
 void Person::setGender(const std::string &gender) {
-  if (gender.find("м") != std::string::npos || gender.find("М") != std::string::npos) {
+  if (
+      gender.find("м") != std::string::npos || 
+      gender.find("М") != std::string::npos
+    ) {
     gender_ = 1;
   } else {
     gender_ = 0;
   }
 }
 
-void Person::setPassportData(const std::string & passportData) {
+void Person::setPassportData(const std::string &passportData) {
   passportData_ = passportData;
 }
 
@@ -148,11 +149,11 @@ void Person::setAge(int age) {
 }
 
 
-void Person::setRandomProperties() {
-  bool gender = Random::getBool();
-  
+void Person::setRandomProperties(int gender) {
+  gender = (gender == -1) ? Random::getInt(0, 1) : gender % 2;
+
   setGender(gender);
-  setName(getRandomName(getGender()));
+  setName(getRandomName(gender));
   setSurname(getRandomSurname(gender));
   setMidname(getRandomMidname(gender));
   setAge(Random::getInt(25, 60));
@@ -160,8 +161,9 @@ void Person::setRandomProperties() {
   std::stringstream ss;
 
   ss.fill('0');
+
   ss 
-    << "60" << Random::getInt(80, 99) 
+    << "60"         << Random::getInt(80, 99) 
     << std::setw(3) << Random::getInt(0, 500) 
     << std::setw(3) << Random::getInt(0, 999);
   
@@ -183,9 +185,7 @@ std::string Person::getMidname() const {
 }
 
 std::string Person::getFullName() const {
-  std::string fullName = surname_ + ' ' + name_ + ' ' + midname_;
-
-  return fullName;
+  return surname_ + ' ' + name_ + ' ' + midname_;
 }
 
 bool Person::getGender() const {

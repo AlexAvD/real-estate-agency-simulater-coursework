@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 #include <vector>
 #include <map>
 #include <stack>
@@ -44,7 +45,7 @@ std::string concat(const std::vector<std::string> & strings, char divider = ' ')
  */
 std::string trim(const std::string & str);
 
-/*  */
+/* шанс "percent"%, что будет true */
 bool chance(int percent = 100);
 
 /* функция возвращает количество совпадающих эелементов вектора "elements" в векторе "src" */
@@ -54,10 +55,22 @@ int countEqualElements(const std::vector<std::string> & src, const std::vector<s
 std::vector<std::string> readFile(const std::string & pathToFile);
 
 /** 
- *  функция считывает файл и возвращает vector состоящий из конейнераов типа map, 
+ *  функция считывает файл и возвращает vector, состоящий из конейнераов типа map, 
  *  состоящий из строк разбитых по разделителю "separator"   
  */
 std::vector<std::map<std::string, std::string>> handleFile(const std::string & pathToFile, char separator);
+
+/* функция перемешиват vector */
+template <class T>
+std::vector<T> *shuffleVector(std::vector<T> *src) {
+  for (size_t i = 0, size = src->size() - 1; i < size; i++) {
+    int randPos = Random::getInt(0, size);
+
+    std::swap((*src)[i], (*src)[randPos]);
+  }
+
+  return src;
+} 
 
 /* вывод всех данных контейнреа vector */
 template <class T>
@@ -109,6 +122,8 @@ std::ostream& endcolor(std::ostream& out);
 /* манипулятор создающий элемент списка, добаляя в вывод "  • "  */
 std::ostream& li(std::ostream& out);
 
+/* генерирут строку, состоющую из "ch", которая повторяется "nRepeat" раз */
+std::string divider(int nRepeat, const std::string &ch, bool newLine = true);
 
 /* функция замараживает текущий поток на время "ms" */
 void wait(int ms);

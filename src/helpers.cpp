@@ -183,6 +183,15 @@ std::ostream& li(std::ostream& out) {
 	return out;
 }
 
+std::string divider(int nRepat, const std::string &ch, bool newLine) {
+	std::string d;
+
+	while(nRepat-- > 0) { d += ch; }
+
+	if (newLine) { d += "\n"; }
+	
+	return d;
+}
 
 template <class T>
 void print(const std::vector<T> &vector) {

@@ -6,6 +6,7 @@
 #include "Person.h"
 #include "RealEstate.h"
 
+class RealEstate;
 class Client : public Person {
   private: 
     RealEstate *realEstate_;
@@ -13,6 +14,7 @@ class Client : public Person {
   public:
     Client();
     Client(const Client &client);
+    ~Client();
 
     static Client generate();
 

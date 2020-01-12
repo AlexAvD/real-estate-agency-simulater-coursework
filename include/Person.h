@@ -24,10 +24,11 @@ class Person {
   public:
     Person();
     Person(const Person & person);
+    ~Person();
 
-    static std::string getRandomName(int gender = -1);
-    static std::string getRandomSurname(int gender = -1);
-    static std::string getRandomMidname(int gender = -1);
+    static std::string getRandomName(bool gender = 1);
+    static std::string getRandomSurname(bool gender = 1);
+    static std::string getRandomMidname(bool gender = 1);
 
      // setters
     void setName(const std::string & name);
@@ -38,7 +39,7 @@ class Person {
     void setGender(bool gender);
     void setGender(const std::string &gender);
     void setAge(int age);
-    void setRandomProperties();
+    void setRandomProperties(int gender = -1);
     virtual std::map<std::string, std::string> 
       setProperties(const std::map<std::string, std::string> &proprerties);
 

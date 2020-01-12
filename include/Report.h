@@ -22,6 +22,8 @@ class Report {
     // setters
 
     // getters
+    RealEstate *getRealEstate() const;
+    long getRevenue() const;
 
     // others
     template <class T>
@@ -44,7 +46,14 @@ class Report {
             << li << "Балкон: " << (report.realEstate_->getBalcony() ? "Есть" : "Нет") << '\n'
             << li << "Лифт: " << (report.realEstate_->getLift() ? "Есть" : "Нет") << '\n'  
             << li << "Планировка: " << report.realEstate_->getLayout() << '\n';
+      } else  if (report.realEstate_->getSaleType() == 0) {
+        out << li << "Материал: " << report.realEstate_->getMaterial() << '\n'
+            << li << "Площадь участва: " << report.realEstate_->getPlotArea() << " м^2" << '\n'
+            << li << "Гараж: " << (report.realEstate_->getGarage() ? "Есть" : "Нет") << '\n';
       }
+
+      out << li << "Тип продажи: " << (report.realEstate_->getSaleType() == 0 ? "Продажа" : "Аренда") << '\n'
+          << li << "Цена: " << report.realEstate_->getPrice() << '\n';
 
       out << "\nБыла " << ((report.realEstate_->getSaleType() == 0) ? "продана" : "сдана в аренду")
           << " клиенту:\n\n"

@@ -142,19 +142,19 @@ std::ostream &Flat::print(std::ostream &out) const {
   Flat::RealEstate::print(out);
 
   out 
-    << "Этаж: " << floor_ << '\n'
-    << "Новостройка: " << (newBuilding_ ? "Да" : "Нет")  << '\n'
-    << "Балкон: " << (balcony_ ? "Есть" : "Нет") << '\n'
-    << "Лифт: " << (lift_ ? "Есть" : "Нет") << '\n'  
-    << "Планировка: " << layout_ << '\n';
+    << li << "Этаж: " << floor_ << '\n'
+    << li << "Новостройка: " << (newBuilding_ ? "Да" : "Нет")  << '\n'
+    << li << "Балкон: " << (balcony_ ? "Есть" : "Нет") << '\n'
+    << li << "Лифт: " << (lift_ ? "Есть" : "Нет") << '\n'  
+    << li << "Планировка: " << layout_ << '\n';
 
   if (saleType != -1) {
     std::string saleTypeStr = (saleType == 0) ? "Продажа" : ( (saleType == 1) ? "Аренда" : "" );
 
-    out << "Тип продажи: " << saleTypeStr << '\n';
+    out << li << "Тип продажи: " << saleTypeStr << '\n';
   }
     
-  out << "Цена: " << getPrice() << " руб." << '\n';
+  out << li << "Цена: " << getPrice() << " руб." << '\n';
 
   return out;
 }

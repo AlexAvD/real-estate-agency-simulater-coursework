@@ -29,16 +29,16 @@ class Date {
 
     // setters
 
-    void setDay(int day);
-    void setMonth(int month);
-    void setYear(int year);
-    void setHour(int hour);
-    void setMinute(int minute);
-    void setSecond(int second);
-    void setDate(int day, int month, int year);
-    void setTime(int hour, int minute, int second);
-    void setDate(const std::string &date);
-    void setTime(const std::string &time);
+    Date &setDay(int day);
+    Date &setMonth(int month);
+    Date &setYear(int year);
+    Date &setHour(int hour);
+    Date &setMinute(int minute);
+    Date &setSecond(int second);
+    Date &setDate(int day, int month, int year);
+    Date &setTime(int hour, int minute, int second);
+    Date &setDate(const std::string &date);
+    Date &setTime(const std::string &time);
 
     // getters
 

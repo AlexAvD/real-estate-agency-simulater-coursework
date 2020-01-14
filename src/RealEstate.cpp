@@ -301,15 +301,15 @@ RealEstate &RealEstate::operator=(const RealEstate &realEstate) {
 
 std::ostream &RealEstate::print(std::ostream &out) const {
   out
-    << "Тип: "            << type_ << '\n'
-    << "Район: "          << district_ << '\n'
-    << "Улица: "          << street_ << '\n'
-    << "Год постройки: "  << buildYear_ << '\n'
-    << "Площадь: "        << area_ << " м^2" << '\n'
-    << "Кол-во комнат: "  << rooms_ << '\n'
-    << "Ремонт: "         << (repair_ ? "Есть" : "Нет")  << '\n'
-    << "Мебель: "         << (furniture_ ? "Есть" : "Нет") << '\n'
-    << "Этажность: "      << floors_ << '\n';
+    << li << "Тип: "            << type_ << '\n'
+    << li << "Район: "          << district_ << '\n'
+    << li << "Улица: "          << street_ << '\n'
+    << li << "Год постройки: "  << buildYear_ << '\n'
+    << li << "Площадь: "        << area_ << " м^2" << '\n'
+    << li << "Кол-во комнат: "  << rooms_ << '\n'
+    << li << "Ремонт: "         << (repair_ ? "Есть" : "Нет")  << '\n'
+    << li << "Мебель: "         << (furniture_ ? "Есть" : "Нет") << '\n'
+    << li << "Этажность: "      << floors_ << '\n';
 
   return out;
 }

@@ -16,9 +16,9 @@ class Agency {
     int workDays_;
     int workHours_;
     // шанс того, что покупатель свяжется с агенством
-    int chanceBuyerWillContact_;
+    int chanceBuyerWillAppeal_;
     // шанс того, что продавец свяжется с агенством
-    int chanceSellerWillContact_;
+    int chanceSellerWillAppeal_;
     long revenue_;
     Date date_;
     // ндс фирмы
@@ -35,14 +35,12 @@ class Agency {
     std::vector<Flat> flats_;
     // хранит все дома 
     std::vector<House> houses_;
-    // хранит всех клиентов 
-    std::vector<Client> clients_;
     // хранит всех доступных продвоцов с недвижимостью для риэлторов
-    std::stack<Client*> availableSellers_;
+    std::stack<Client> availableSellers_;
     // покупатели которые обратились в агенство 
-    std::stack<Client*> buyers_;
+    std::stack<Client> appealedBuyers_;
     // продавцы которые обратились в агенство 
-    std::stack<Client*> sellers_;
+    std::stack<Client> appealedSellers_;
 
   public:
     Agency();
@@ -57,7 +55,6 @@ class Agency {
     void setRealtors(std::stack<Realtor> *realtors);
     void setFlats(std::stack<Flat> *flats);
     void setHouses(std::stack<House> *houses);
-    void setClients();
     void setAvailableSellers();
 
     // getters
@@ -72,26 +69,28 @@ class Agency {
     std::vector<House>    &getHouses();
     std::vector<Client>   &getClients();
 
-    std::stack<Client*> &getAvailableSellers();
-    std::stack<Client*> &getBuyers();
-    std::stack<Client*> &getSellers();
+    std::stack<Client> &getAvailableSellers();
+    std::stack<Client> &getAppealedBuyers();
+    std::stack<Client> &getAppealedSellers();
 
-    Client *getAvailableSeller();
-    Client *getSeller();
-    Client *getBuyer();
+    Client getAvailableSeller();
+    Client getAppealedSeller();
+    Client getAppealedBuyer();
 
     // others
-    Client *addSeller(Client *seller);
-    Client *addBuyer(Client *buyer);
-    Client *addClient(const Client &client);
-    
+    bool hasAppeals() const;
+    bool didBuyerAppeal() const;
+    bool didSellerAppeal() const;
+
+    void addAppealedSeller(const Client &seller);
+    void addAppealedBuyer(const Client &buyer);
+    void addAvailableSeller(const Client &availableSeller);
+  
     Flat *addFlat(const Flat &flat);
     House *addHouse(const House &house);
-    Client *addAvailableSeller(Client *availableSeller);
-
     
-    Client *generateSeller();
-    Client *generateBuyer();
+    Client generateSeller();
+    Client generateBuyer();
     void generateAndAddBuyer();
     void generateAndAddSeller();
      

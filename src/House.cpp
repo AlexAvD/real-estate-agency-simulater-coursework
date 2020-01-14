@@ -119,17 +119,17 @@ std::ostream &House::print(std::ostream &out) const {
   House::RealEstate::print(out);
 
   out 
-    << "Материал: " << material_ << "\n"
-    << "Площадь участка: " << plotArea_ << " м^2\n" 
-    << "Гараж: " << ((garage_) ? "Есть" : "Нет") << "\n";
+    << li << "Материал: " << material_ << "\n"
+    << li << "Площадь участка: " << plotArea_ << " м^2\n" 
+    << li << "Гараж: " << ((garage_) ? "Есть" : "Нет") << "\n";
 
   if (saleType != -1) {
     std::string saleTypeStr = (saleType == 0) ? "Продажа" : ( (saleType == 1) ? "Аренда" : "" );
 
-    out << "Тип продажи: " << saleTypeStr << '\n';
+    out << li << "Тип продажи: " << saleTypeStr << '\n';
   }
     
-  out << "Цена: " << getPrice() << " руб." << '\n';
+  out << li << "Цена: " << getPrice() << " руб." << '\n';
 
   return out;
 }

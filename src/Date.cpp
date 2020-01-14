@@ -32,7 +32,7 @@ Date::Date(const std::string & date, const std::string & time) {
   setTime(time);
 }
 
-void Date::setYear(int year) {
+Date &Date::setYear(int year) {
   if (year > 9999) {
     year_ = 9999;
   } else if (year < 0) {
@@ -40,25 +40,31 @@ void Date::setYear(int year) {
   } else {
     year_ = year;
   }
+
+  return *this;
 }
 
-void Date::setMonth(int month) {
+Date &Date::setMonth(int month) {
   if (month > 12 || month < 1) {
     month_ = (11 + month % 12 ) % 12 + 1;
   } else {
     month_ = month;
   }
+
+  return *this;
 }
 
-void Date::setDay(int day) {
+Date &Date::setDay(int day) {
   if (day > days_[month_] || day < 1) {
     day_ = ((days_[month_] - 1) + day % days_[month_]) %  days_[month_] + 1;
   } else {
     day_ = day;
   }
+
+  return *this;
 }
 
-void Date::setHour(int hour) {
+Date &Date::setHour(int hour) {
   if (hour > 23) {
     hour_ %= 24;
   } else if (hour < 0) {
@@ -66,9 +72,11 @@ void Date::setHour(int hour) {
   } else {
     hour_ = hour;
   }
+
+  return *this;
 }
 
-void Date::setMinute(int minute) { 
+Date &Date::setMinute(int minute) { 
   if (minute > 59) {
     minute_ %= 60;
   } else if (minute < 0) {
@@ -76,9 +84,11 @@ void Date::setMinute(int minute) {
   } else {
     minute_ = minute;
   }
+
+  return *this;
 }
 
-void Date::setSecond(int second) {
+Date &Date::setSecond(int second) {
   if (second > 59) {
     second_ %= 60;
   } else if (second < 0) {
@@ -86,31 +96,45 @@ void Date::setSecond(int second) {
   } else {
     second_ = second;
   }
+
+  return *this;
 }
 
-void Date::setDate(int day, int month, int year) {
+Date &Date::setDate(int day, int month, int year) {
   setMonth(month);
   setDay(day);
   setYear(year);
+
+  return *this;  
 }
 
-void Date::setDate(const std::string &date) {
-  std::vector<std::string> tokenizedDate = tokenize(date, '.');
+Date &Date::setDate(const std::string &date) {
+  if (date.length()) {
+    std::vector<std::string> tokenizedDate = tokenize(date, '.');
 
-  setDate(
-    stoi(tokenizedDate[0]),
-    stoi(tokenizedDate[1]),
-    stoi(tokenizedDate[2])
-  );
+    setDate(
+      stoi(tokenizedDate[0]),
+      stoi(tokenizedDate[1]),
+      stoi(tokenizedDate[2])
+    );
+  } else {
+    day_ = now_->tm_mday;
+    month_ = now_->tm_mon + 1;
+    year_ = now_->tm_year + 1900;
+  }
+  
+  return *this;
 }
 
-void Date::setTime(int hour, int minute, int second) {
+Date &Date::setTime(int hour, int minute, int second) {
   setHour(hour);
   setMinute(minute);
   setSecond(second);
+
+  return *this;
 }
 
-void Date::setTime(const std::string & time) {
+Date &Date::setTime(const std::string & time) {
   std::vector<std::string> tokenizedTime = tokenize(time, ':');
 
   setTime(
@@ -118,6 +142,8 @@ void Date::setTime(const std::string & time) {
     stoi(tokenizedTime[1]),
     stoi(tokenizedTime[2])
   );
+
+  return *this;
 }
 
 int Date::getDay() const {

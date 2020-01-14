@@ -4,13 +4,13 @@ Agency::Agency() {
   workDays_ = 30;
   workHours_ = 12;
   taxRate_ = 0.15;
-  chanceBuyerWillContact_ = 5;
-  chanceSellerWillContact_ = 10;
+  chanceBuyerWillAppeal_ = 5;
+  chanceSellerWillAppeal_ = 10;
   revenue_ = 0;
   saleCommision_ = 0.06;
   rentCommision_ = 0.5;
   salaryRate_ = 0.6;
-  date_ = Date(); 
+  date_ = Date("", "07:00:00"); 
 }
 
 Agency::Agency(
@@ -21,7 +21,6 @@ Agency::Agency(
   setRealtors(realtors);
   setFlats(flats);
   setHouses(houses);
-  setClients();
   setAvailableSellers();
 }
 
@@ -59,25 +58,27 @@ void Agency::setHouses(std::stack<House> *houses) {
   }
 }
 
-void Agency::setClients() {
-  Client *buyer;
+void Agency::setAvailableSellers() {
+  Client seller;
+
+  shuffleVector(&flats_);
 
   for (Flat &flat : flats_) {
-    buyer = addClient(Client::generate());
-    buyer->setRealEstate(&flat);  
+    seller = Client::generate();
+
+    seller.setRealEstate(&flat);  
+
+    addAvailableSeller(seller);
   }
+
+  shuffleVector(&houses_);
 
   for (House &house : houses_) {
-    buyer = addClient(Client::generate());
-    buyer->setRealEstate(&house);
-  }
+    seller = Client::generate();
 
-  shuffleVector(&clients_);
-}
+    seller.setRealEstate(&house);  
 
-void Agency::setAvailableSellers() {
-  for (Client &client : clients_) {
-    addAvailableSeller(&client);
+    addAvailableSeller(seller);
   }
 }
 
@@ -111,24 +112,20 @@ std::vector<House> &Agency::getHouses() {
   return houses_;
 }
 
-std::vector<Client> &Agency::getClients() {
-  return clients_;
+std::stack<Client> &Agency::getAppealedBuyers() {
+  return appealedBuyers_;
 }
 
-std::stack<Client*> &Agency::getBuyers() {
-  return buyers_;
+std::stack<Client> &Agency::getAppealedSellers() {
+  return appealedSellers_;
 }
 
-std::stack<Client*> &Agency::getSellers() {
-  return sellers_;
-}
-
-std::stack<Client*> &Agency::getAvailableSellers() {
+std::stack<Client> &Agency::getAvailableSellers() {
   return availableSellers_;
 }
 
-Client *Agency::getAvailableSeller() {
-  Client *availableSeller = nullptr;
+Client Agency::getAvailableSeller() {
+  Client availableSeller;
 
   if (!availableSellers_.empty()) {
     availableSeller = availableSellers_.top();
@@ -139,48 +136,46 @@ Client *Agency::getAvailableSeller() {
   return availableSeller;
 }
 
-Client *Agency::getSeller() {
-  Client *seller = nullptr;
+Client Agency::getAppealedSeller() {
+  Client aSeller = appealedSellers_.top();
 
-  if (!sellers_.empty()) {
-    seller = sellers_.top();
+  appealedSellers_.pop();
 
-    sellers_.pop();
-  }
-
-  return seller;
+  return aSeller;
 }
 
-Client *Agency::getBuyer() {
-  Client *buyer = nullptr;
+Client Agency::getAppealedBuyer() {
+  Client aBuyer = appealedBuyers_.top();;
 
-  if (!buyers_.empty()) {
-    buyer = buyers_.top();
+  appealedBuyers_.pop();
 
-    buyers_.pop();
-  }
-
-  return buyer;
+  return aBuyer;
 }
 
 // others
 
-Client *Agency::addSeller(Client *seller) {
-  sellers_.push(seller);
-
-  return sellers_.top();
+bool Agency::hasAppeals() const {
+  return (didBuyerAppeal() || didSellerAppeal());
 }
 
-Client *Agency::addBuyer(Client *buyer) {
-  buyers_.push(buyer);
-
-  return buyers_.top();
+bool Agency::didBuyerAppeal() const {
+  return (appealedBuyers_.size()) ? true : false;
 }
 
-Client *Agency::addClient(const Client &client) {
-  clients_.push_back(client);
+bool Agency::didSellerAppeal() const {
+  return (appealedSellers_.size()) ? true : false;
+}
 
-  return &clients_.back();
+void Agency::addAvailableSeller(const Client &availableSeller) {
+  availableSellers_.push(availableSeller);
+}
+
+void Agency::addAppealedSeller(const Client &seller) {
+  appealedSellers_.push(seller);
+}
+
+void Agency::addAppealedBuyer(const Client &buyer) {
+  appealedBuyers_.push(buyer);
 }
 
 Flat *Agency::addFlat(const Flat &flat) {
@@ -195,18 +190,12 @@ House *Agency::addHouse(const House &house) {
   return &houses_.back();
 }
 
-Client *Agency::addAvailableSeller(Client *availableSeller) {
-  availableSellers_.push(availableSeller);
-
-  return availableSellers_.top();
+Client Agency::generateBuyer() {
+  return Client::generate();
 }
 
-Client *Agency::generateBuyer() {
-  return addClient(Client::generate());
-}
-
-Client *Agency::generateSeller() {
-  Client *buyer = generateBuyer();
+Client Agency::generateSeller() {
+  Client buyer = generateBuyer();
   RealEstate *realEstate;
   
   if (chance(70)) {
@@ -215,25 +204,25 @@ Client *Agency::generateSeller() {
     realEstate = addHouse(House::generate());
   }
 
-  buyer->setRealEstate(realEstate);
+  buyer.setRealEstate(realEstate);
 
   return buyer;
 }
 
 void Agency::generateAndAddBuyer() {
-  addBuyer(generateBuyer());
+  addAppealedBuyer(generateBuyer());
 }
 
 void Agency::generateAndAddSeller() {
-  addSeller(generateSeller());
+  addAvailableSeller(generateSeller());
 }
 
 void Agency::generateAndAddClient() {
-  if (chance(chanceBuyerWillContact_)) {
+  if (chance(chanceBuyerWillAppeal_)) {
     generateAndAddBuyer();
   }
 
-  if (chance(chanceSellerWillContact_)) {
+  if (chance(chanceSellerWillAppeal_)) {
     generateAndAddSeller();
   }
 }

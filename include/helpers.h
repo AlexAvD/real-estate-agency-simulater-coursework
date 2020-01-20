@@ -36,19 +36,32 @@ std::vector<std::string> tokenize(const std::string & str, char separator);
 /* функция убирает все начальные, конечные и повторяющиеся подряд пробелы */
 std::string normalizeLine(const std::string & str);
 
-/* функция убирает все начальные и конечные пробельные символы */
-std::string concat(const std::vector<std::string> & strings, char divider = ' ');
-
 /**
- *  функция соединяет конкатенирует vector "strings" состоящий из строк,
- *  разделяю их разделителем "divider" 
+ * функция соединяет конкатенирует vector "strings" состоящий из строк,
+ * разделяю их разделителем "divider" 
  */
-std::string trim(const std::string & str);
+std::string concat(const std::vector<std::string> &strings, char divider = ' ');
+
+/* функция убирает все начальные и конечные пробельные символы */
+std::string trim(const std::string &str);
+
+/** 
+ * фукция создает рамку вокруг текста "str", длинной "width", состояющую из символа "border", 
+ * с в верхними и нимжними отступами равными "paddingTopBottom"
+ */
+std::string fixedBox(const std::string &str, int width = 0, int paddingTopBottom = 0, char border = '#');
+
+/* функция на основе ширины "width" довобаляет к строке "str" начальные пробелы и конечные пробелы */
+std::string center(const std::string &str, int width);
+
+
+/* функция возвращает строку состоющую только из кириллических символов */
+std::string onlyCyrillic(const std::string &str);
 
 /* шанс "percent"%, что будет true */
 bool chance(int percent = 100);
 
-/* функция возвращает количество совпадающих эелементов вектора "elements" в векторе "src" */
+/* функция возвращает количество совпадающих строк вектора "elements" в векторе "src" */
 int countEqualElements(const std::vector<std::string> & src, const std::vector<std::string> & elements);
 
 /* функция считывает файл и возвращает vector состоящий из строк файла */
@@ -140,7 +153,7 @@ int getSign(T num) {
   return (num >= 0) - (num <= 0);
 }
 
-/* функция округляет число "num" до значения "digit" */
+/* функция округляет число "num" д  о значения "digit" */
 int roundTo(int num, int digit);
 
 /* функция проверяет лежит ли число в диапазоне от "min" до "max" */

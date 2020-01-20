@@ -10,7 +10,7 @@ Flat::Flat() : RealEstate() {
   newBuilding_ = false;
   balcony_ = false;
   lift_ = false;
-  layout_ = "";
+  layout_ = ""; 
 }
 
 Flat::Flat(const Flat &flat) : RealEstate(flat) {
@@ -76,10 +76,10 @@ void Flat::setLayout(std::string layout) {
 }
 
 std::map<std::string, std::string> 
-Flat::setProperties(const std::map<std::string, std::string> &proprerties) {
+Flat::setProperties(const std::map<std::string, std::string> &properties) {
   std::map<std::string, std::string> remainingProperties;
 
-  for (const auto &[key, val] : Flat::RealEstate::setProperties(proprerties)) {
+  for (const auto &[key, val] : Flat::RealEstate::setProperties(properties)) {
     if (key == "Этаж") {
       setFloor(std::stoi(val));
     } else if (key == "Новостройка") {

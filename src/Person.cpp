@@ -77,10 +77,10 @@ std::string Person::getRandomMidname(bool gender) {
 }
 
 std::map<std::string, std::string> 
-Person::setProperties(const std::map<std::string, std::string> &proprerties) {
+Person::setProperties(const std::map<std::string, std::string> &properties) {
   std::map<std::string, std::string> remainingProperties;
 
-  for (const auto &[key, val] : proprerties) {
+  for (const auto &[key, val] : properties) {
     if (key == "Имя") {
       setName(val);
     } else if (key == "Фамилия") {
@@ -200,8 +200,6 @@ int Person::getAge() const {
   return age_;
 }
 
-
-
 // others
 
 std::ostream& operator<<(std::ostream &out, const Person &person) {
@@ -209,10 +207,11 @@ std::ostream& operator<<(std::ostream &out, const Person &person) {
 }
 
 std::ostream& Person::print(std::ostream &out) const {
-  out << "ФИО: " << getFullName() << '\n'
-      << "Пол: " << (gender_ ? "муж." : "жен.") << '\n'
-      << "Возраст: " << age_ << '\n'
-      << "Паспортные данные: " << passportData_ << '\n';
+  out 
+    << li << "ФИО: " << getFullName() << '\n'
+    << li << "Пол: " << (gender_ ? "муж." : "жен.") << '\n'
+    << li << "Возраст: " << age_ << '\n'
+    << li << "Паспортные данные: " << passportData_ << '\n';
 
   return out;
 }

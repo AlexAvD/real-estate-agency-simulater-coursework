@@ -4,12 +4,14 @@ Agency::Agency() {
   workDays_ = 30;
   workHours_ = 12;
   taxRate_ = 0.15;
-  chanceBuyerWillAppeal_ = 5;
-  chanceSellerWillAppeal_ = 10;
+  chanceBuyerWillAppeal_ = 2;
+  chanceSellerWillAppeal_ = 4;
+  nSold_ = 0;
+  nRented_ = 0;
   revenue_ = 0;
   saleCommision_ = 0.06;
   rentCommision_ = 0.5;
-  salaryRate_ = 0.6;
+  realtorCommision_ = 0.6;
   date_ = Date("", "07:00:00"); 
 }
 
@@ -61,9 +63,7 @@ void Agency::setHouses(std::stack<House> *houses) {
 void Agency::setAvailableSellers() {
   Client seller;
 
-  shuffleVector(&flats_);
-
-  for (Flat &flat : flats_) {
+  for (auto &flat : flats_) {
     seller = Client::generate();
 
     seller.setRealEstate(&flat);  
@@ -71,15 +71,16 @@ void Agency::setAvailableSellers() {
     addAvailableSeller(seller);
   }
 
-  shuffleVector(&houses_);
-
-  for (House &house : houses_) {
+  for (auto &house : houses_) {
     seller = Client::generate();
 
     seller.setRealEstate(&house);  
 
     addAvailableSeller(seller);
   }
+
+
+  shuffleVector(&availableSellers_);
 }
 
 // getters
@@ -92,6 +93,10 @@ float Agency::getRentCommision() const {
   return rentCommision_;
 }
 
+float Agency::getRealtorCommision() const {
+  return realtorCommision_;
+}
+
 long Agency::getRevenue() const {
   return revenue_;
 }
@@ -100,15 +105,15 @@ Date Agency::getDate() const {
   return date_;
 }
 
-std::vector<Realtor> &Agency::getRealtors() {
+std::list<Realtor> &Agency::getRealtors() {
   return realtors_;
 }
 
-std::vector<Flat> &Agency::getFlats() {
+std::list<Flat> &Agency::getFlats() {
   return flats_;
 }
 
-std::vector<House> &Agency::getHouses() {
+std::list<House> &Agency::getHouses() {
   return houses_;
 }
 
@@ -120,7 +125,7 @@ std::stack<Client> &Agency::getAppealedSellers() {
   return appealedSellers_;
 }
 
-std::stack<Client> &Agency::getAvailableSellers() {
+std::vector<Client> &Agency::getAvailableSellers() {
   return availableSellers_;
 }
 
@@ -128,9 +133,9 @@ Client Agency::getAvailableSeller() {
   Client availableSeller;
 
   if (!availableSellers_.empty()) {
-    availableSeller = availableSellers_.top();
+    availableSeller = availableSellers_.back();
 
-    availableSellers_.pop();
+    availableSellers_.pop_back();
   }
 
   return availableSeller;
@@ -167,7 +172,7 @@ bool Agency::didSellerAppeal() const {
 }
 
 void Agency::addAvailableSeller(const Client &availableSeller) {
-  availableSellers_.push(availableSeller);
+  availableSellers_.push_back(availableSeller);
 }
 
 void Agency::addAppealedSeller(const Client &seller) {
@@ -178,16 +183,51 @@ void Agency::addAppealedBuyer(const Client &buyer) {
   appealedBuyers_.push(buyer);
 }
 
-Flat *Agency::addFlat(const Flat &flat) {
-  flats_.push_back(flat);
+Client *Agency::addBuyersPurchased(const Client &buyerPurchased) {
+  RealEstate *realEstate = buyerPurchased.getRealEstate();
+  
+  int saleType = realEstate->getSaleType();
 
-  return &flats_.back();
+  if (saleType == 0) {
+    ++nSold_;
+  } else if (saleType == 1) {
+    ++nRented_;
+  }
+
+  float commision = 1;
+  
+  if (saleType == 0) {
+    commision = saleCommision_;
+  } else if (saleType == 1) {
+    commision = rentCommision_;
+  }
+
+  revenue_ += realEstate->getPrice() * commision; 
+
+  std::string realEstateType = realEstate->getType();
+
+  if (popularRealEstates_.find(realEstateType) == popularRealEstates_.end()) {
+    popularRealEstates_[realEstateType] = 1;
+  } else {
+    ++popularRealEstates_[realEstateType];
+  }
+
+  buyersPurchased_.push(buyerPurchased);
+
+  return &buyersPurchased_.top();
+}
+
+
+Flat *Agency::addFlat(const Flat &flat) {
+  Flat &f = flats_.emplace_back(flat);
+
+  return &f;
 }
 
 House *Agency::addHouse(const House &house) {
-  houses_.push_back(house);
+  House &h = houses_.emplace_back(house);
 
-  return &houses_.back();
+  return &h;
 }
 
 Client Agency::generateBuyer() {
@@ -197,7 +237,7 @@ Client Agency::generateBuyer() {
 Client Agency::generateSeller() {
   Client buyer = generateBuyer();
   RealEstate *realEstate;
-  
+
   if (chance(70)) {
     realEstate = addFlat(Flat::generate());
   } else {
@@ -214,7 +254,7 @@ void Agency::generateAndAddBuyer() {
 }
 
 void Agency::generateAndAddSeller() {
-  addAvailableSeller(generateSeller());
+  addAppealedSeller(generateSeller());
 }
 
 void Agency::generateAndAddClient() {
@@ -249,70 +289,64 @@ void Agency::simulate() {
 }
 
 void Agency::writeReport(const std::string pathToFile) {
-  std::ofstream out;
+  std::ofstream file(pathToFile);
 
-  out.open(pathToFile);
+  if (file.is_open()) {
+    
+    file 
+        << "\n"
+        << center("ОТЧЁТ ПО РИЭЛТОРСОКОЙ ДЕЯТЕЛЬНОСТИ С " + Date().getDate() + " ПО " + date_.getDate(), 70) 
+        << "\n" << divider(70, "╼") << "\n";
 
-  if (out.is_open()) {
-    int nSold = 0;
-    int nRented = 0;
-    int saleType;
-    int realtorSalary = 0;
-    int totalSalary = 0;
-    int tax = 0;
-    long revenue = 0;
-
-    out << "\n                  ОТЧЁТ ПО РИЭЛТОРСОКОЙ ДЕЯТЕЛЬНОСТИ ЗА " << date_.getDate() << '\n'
-        << divider(85, "╼") << "\n";
+    long revenueWithSalaries = revenue_;
+    long earnings = 0;
+    long salaries = 0;
 
     for (Realtor &realtor : realtors_) {
-      out << "Сотрудник " << realtor.getFullName() << " выполнил следующий план за данный месяц:\n\n";
+      earnings = realtor.getEearnings();
+      revenueWithSalaries -= earnings;
+      salaries += earnings;
 
-      realtorSalary = 0;
+      std::stringstream title;
 
-      for (Report &report : realtor.getReports()) {
-        revenue       += report.getRevenue();
-        realtorSalary += report.getRevenue();
+      title
+        << divider(5, "-", 0) 
+        << " Отчет сотрудника " << realtor.getFullName() << " "
+        << divider(5, "-", 0);
 
-        saleType = report.getRealEstate()->getSaleType();
 
-        if (saleType == 0) {
-          ++nSold;
-        } else if (saleType == 1) {
-          ++nRented;
-        }
+      file << "\n" << center(title.str(), 70) << "\n\n";
 
-        out << report;
+      for (std::string &log : realtor.getLogs()) {
+        file << log;
       }
 
-      if (realtorSalary == 0 ) {
-        out << "Не удалось продать/сдать недвивижимость\n";
-
-        realtorSalary = realtor.getSalary();
-      } else {
-        realtorSalary -= realtorSalary * salaryRate_;
-      }
-      
-      totalSalary += realtorSalary;
-
-      out << divider(85, "╼") << "\n"
-          << "Заплата сотруника за данный месяц составила " << (realtorSalary) << " руб.\n\n"
-          << divider(85, "╼") << "\n";
+      file << "\n" << divider(70, "╼") << "\n";
     }
 
-    tax = revenue * taxRate_;
-    
-    out << "Итоги: \n\n" 
-        << li << "Кол-во проданной недвижимости: " << nSold << "\n"
-        << li << "Кол-во сданной в аренду недвижимости: " << nRented << "\n"
-        << li << "Доходы фирмы: " << revenue << " руб.\n"
-        << li << "НДС фирмы составил: " << tax << " руб.\n"
-        << li << "Зарплата сотрудников составила: " << totalSalary << "\n"
-        << li << "Доходы фирмы с учетом НДС и зарплаты сотрудников: " << (revenue - tax - totalSalary) << " руб.\n";
+
+    std::string popularRealEstateType = "";
+    int nPurchases = 0;
+
+    for (const auto &[key, val] : popularRealEstates_) {
+      if (val > nPurchases) {
+        nPurchases = val;
+        popularRealEstateType = key;
+      }
+    }
+
+    long tax = revenue_ * taxRate_;
+
+    file
+      << center("ИТОГИ", 70) << "\n\n"
+      << li << "Кол-во проданной недвижимости: " << nSold_ << "\n"
+      << li << "Кол-во сданной в аренду недвижимости: " << nRented_ << "\n"
+      << li << "Популярная недвижимость по итогам месяца: " << popularRealEstateType << "\n"
+      << li << "Доходы фирмы без учета НДС и зарплат сотрудников: " << revenue_ << " руб.\n"
+      << li << "НДС фирмы составил: " << tax << " руб.\n"
+      << li << "Зарплаты сотрудников составили: " << revenueWithSalaries << " руб.\n"
+      << li << "Итого доход фирмы: " << revenue_ - tax - revenueWithSalaries << " руб.\n";
+
+    file.close();
   }
-
-}
-
-void Agency::addRevenue(int revenue) {
-  revenue_ += revenue;
 }

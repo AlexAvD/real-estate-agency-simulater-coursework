@@ -55,7 +55,7 @@ RealEstate::RealEstate() {
   saleType_ = -1;
   price_ = 0;
   furniture_ = false;
-  repair_ = false;
+  repair_ = false; 
 }
 
 RealEstate::RealEstate(const RealEstate & realEstate) {
@@ -196,10 +196,10 @@ void RealEstate::setRandomProperties(int typeOfConstruction) {
   }
 }
 
-std::map<std::string, std::string> RealEstate::setProperties(const std::map<std::string, std::string> &proprerties) {
+std::map<std::string, std::string> RealEstate::setProperties(const std::map<std::string, std::string> &properties) {
   std::map<std::string, std::string> remainingProperties;
 
-  for (const auto &[key, val] : proprerties) {
+  for (const auto &[key, val] : properties) {
     if (key == "Тип") {
       setType(val);
     } else if (key == "Район") {

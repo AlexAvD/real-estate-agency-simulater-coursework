@@ -14,8 +14,7 @@ bool isBlank(const std::string & str) {
   return true;
 }
 
-std::vector<std::string> tokenize(const std::string & str, char separator) {
-	
+std::vector<std::string> tokenize(const std::string &str, char separator) {
   std::vector<std::string> result;
 
 	for (size_t start = 0, end = 0, len = str.length(); end < len; ++end) {
@@ -68,6 +67,84 @@ std::string trim(const std::string & str) {
   return str.substr(start, end - start + 1);
 }
 
+std::string fixedBox(const std::string &str, int width, int paddingTopBottom, char border) {
+	int strLen = str.length() - onlyCyrillic(str).length() / 2;
+	int paddingLeftAndRight;
+	int paddingLeft;
+	int paddingRight;
+	std::stringstream result;
+
+	
+	width = (width < strLen) ? strLen : width;
+	paddingTopBottom = (paddingTopBottom < 0) ? 0 : paddingTopBottom;
+	
+	paddingLeftAndRight = width - strLen;
+	paddingRight = paddingLeftAndRight / 2;
+	paddingLeft = paddingLeftAndRight - paddingRight;
+
+	// top outline
+	result.fill(border);
+	result << std::setw(width) << border << "\n";
+
+	result.fill(' ');	
+
+	for (int i = 0; i < paddingTopBottom; i++) {
+		result << border << std::setw(width - 1) << border << "\n";
+	}
+	
+	result 
+		// left padding
+		<< border << std::setw(paddingLeft - 1) << " "
+		<< str
+		// right padding
+		<< std::setw(paddingRight - 1) << " " << border << "\n";
+
+	for (int i = 0; i < paddingTopBottom; i++) {
+		result << border << std::setw(width - 1) << border << "\n";
+	}
+
+	// bottom outline
+	result.fill(border);
+	result << std::setw(width) << border << "\n";
+
+	
+	return result.str();
+}
+
+
+std::string center(const std::string &str, int width) {
+	// расчет размера строки с кирилическими символами 
+	int len = str.length() - onlyCyrillic(str).length() / 2;
+
+	if (len >= width) {
+		return str;
+	} 
+
+	int paddingLeftRight = (width - len) / 2;
+	
+	std::stringstream ss;
+
+	ss.fill(' ');
+	
+	ss 
+		<< std::setw(paddingLeftRight) << "" 
+		<< str
+		<< std::setw(paddingLeftRight) << "";
+
+	return ss.str();
+}
+
+std::string onlyCyrillic(const std::string &str) {
+	std::string result = "";
+
+	for (auto ch : str) {
+		if (!isgraph(ch) && !isspace(ch)) {
+			result.push_back(ch);
+		}
+	}
+
+	return result;
+}
 
 std::string concat(const std::vector<std::string> & strings, char divider) {
   std::string result = "";
@@ -208,7 +285,7 @@ template void print<std::string>(const std::vector<std::string> &v);
 
 /* 
 
-asim Example:
+asim при i от 0 до ...:
 
 asim(i, 0, 100, 0):     | asim(i, 0, 100, 1):   | asim(i, 0, 100, 5):   | asim(i, 0, 100, 10):
 ----------------------------------------------------------------------------------------------

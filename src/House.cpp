@@ -78,10 +78,10 @@ void House::setRandomProperties() {
 }
 
 std::map<std::string, std::string> 
-House::setProperties(const std::map<std::string, std::string> &proprerties) {
+House::setProperties(const std::map<std::string, std::string> &properties) {
   std::map<std::string, std::string> remainingProperties;
 
-  for (const auto &[key, val] : (House::RealEstate::setProperties(proprerties))) {
+  for (const auto &[key, val] : (House::RealEstate::setProperties(properties))) {
     if (key == "Материал") {
       setMaterial(val);
     } else if (key == "Площадь участка") {
